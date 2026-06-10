@@ -558,6 +558,24 @@
       transition: border-color .25s, color .25s;
     }
     .s-btn:hover { border-color: #fff; color: #fff; }
+
+    /* ── Carte split ── */
+    .carte-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.8rem;
+      align-items: start;
+    }
+    .carte-img img {
+      width: 100%;
+      height: 360px;
+      object-fit: cover;
+      border-radius: var(--r-md);
+    }
+    @media (max-width: 880px) {
+      .carte-split { grid-template-columns: 1fr; }
+      .carte-img img { height: 220px; }
+    }
   </style>
 </head>
 <body>
@@ -575,7 +593,7 @@
         <li><a href="#galerie">Galerie</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
-      <a href="#contact" class="btn btn--dark nav-cta">Nous trouver</a>
+      <a href="https://www.google.com/maps/dir/?api=1&destination=3+bis+rue+Napol%C3%A9on+60200+Compi%C3%A8gne+France" target="_blank" rel="noopener" class="btn btn--dark nav-cta">Nous trouver</a>
       <button class="burger" id="burger" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
@@ -598,7 +616,7 @@
           <p class="sub">Café, bar et crêperie — savourez, respirez et profitez de chaque instant.</p>
           <div class="hero-actions">
             <a href="#carte" class="btn btn--dark">Découvrir la carte</a>
-            <a href="#contact" class="btn btn--light">Nous trouver</a>
+            <a href="https://www.google.com/maps/dir/?api=1&destination=3+bis+rue+Napol%C3%A9on+60200+Compi%C3%A8gne+France" target="_blank" rel="noopener" class="btn btn--light">Nous trouver</a>
           </div>
         </div>
         <ul class="hero-perks">
@@ -653,9 +671,11 @@
         <div class="histoire-text reveal">
           <span class="eyebrow">Qui sommes-nous</span>
           <h2 class="h-lg">Notre histoire</h2>
+          <p>Tout a commencé avec une idée simple : créer un endroit où chaque détail invite à ralentir. Un lieu pensé comme un refuge de douceur, loin de l'agitation de la ville, où le temps s'étire au rythme d'un café fumant et d'une conversation.</p>
           <p>Niché au cœur de Compiègne, le Pastel Café est né d'une passion pour les lieux chaleureux et les instants suspendus. Notre équipe jeune et dynamique a imaginé un espace où l'on se sent immédiatement chez soi.</p>
           <p>Des plantes tropicales cascadant depuis les étagères, un papier peint fleuri qui enveloppe la salle, des fauteuils en rotin, des tables en bois clair et la lumière dorée du soir — chaque détail a été pensé pour vous.</p>
           <p>Entre café parisien chic et salon de thé botanique, nous vous proposons bien plus qu'une boisson : une expérience sensorielle, artisanale et conviviale.</p>
+          <p>Aujourd'hui, le Pastel Café accueille ses habitués comme des amis. Étudiants, familles, voyageurs de passage ou Compiégnois de longue date — tout le monde trouve sa place dans notre écrin fleuri. Venez comme vous êtes.</p>
           <div class="tags">
             <span class="tag">Cozy</span>
             <span class="tag">Floral</span>
@@ -691,65 +711,90 @@
         </div>
 
         <div class="tab-panel active" id="tp-chaudes">
-          <div class="menu-card">
-            <h3>Boissons chaudes</h3>
-            <ul class="menu-list">
-              <li><span class="menu-dot"></span>Espresso</li>
-              <li><span class="menu-dot"></span>Cappuccino</li>
-              <li><span class="menu-dot"></span>Latte</li>
-              <li><span class="menu-dot"></span>Chocolat Viennois</li>
-              <li><span class="menu-dot"></span>Sélection de thés — sachet-cadeau 15 €</li>
-              <li><span class="menu-dot"></span>Baileys Coffee</li>
-            </ul>
+          <div class="carte-split">
+            <div class="carte-img">
+              <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=700&q=80&fit=crop" alt="Latte art Pastel Café" loading="lazy">
+            </div>
+            <div class="menu-card">
+              <h3>Boissons chaudes</h3>
+              <ul class="menu-list">
+                <li><span class="menu-dot"></span>Espresso</li>
+                <li><span class="menu-dot"></span>Cappuccino</li>
+                <li><span class="menu-dot"></span>Latte</li>
+                <li><span class="menu-dot"></span>Chocolat Viennois</li>
+                <li><span class="menu-dot"></span>Sélection de thés — sachet-cadeau 15 €</li>
+                <li><span class="menu-dot"></span>Baileys Coffee</li>
+              </ul>
+            </div>
           </div>
         </div>
 
         <div class="tab-panel" id="tp-froides">
-          <div class="menu-card">
-            <h3>Boissons froides</h3>
-            <ul class="menu-list">
-              <li><span class="menu-dot"></span>Cocktails sans alcool</li>
-              <li><span class="menu-dot"></span>Mocktails fruités maison</li>
-              <li><span class="menu-dot"></span>Milkshakes</li>
-              <li><span class="menu-dot"></span>Smoothies</li>
-              <li><span class="menu-dot"></span>Limonades artisanales</li>
-            </ul>
+          <div class="carte-split">
+            <div class="carte-img">
+              <img src="https://images.unsplash.com/photo-1544145945-f90425340c7e?w=700&q=80&fit=crop" alt="Boissons froides Pastel Café" loading="lazy">
+            </div>
+            <div class="menu-card">
+              <h3>Boissons froides</h3>
+              <ul class="menu-list">
+                <li><span class="menu-dot"></span>Cocktails sans alcool</li>
+                <li><span class="menu-dot"></span>Mocktails fruités maison</li>
+                <li><span class="menu-dot"></span>Milkshakes</li>
+                <li><span class="menu-dot"></span>Smoothies</li>
+                <li><span class="menu-dot"></span>Limonades artisanales</li>
+              </ul>
+            </div>
           </div>
         </div>
 
         <div class="tab-panel" id="tp-bar">
-          <div class="menu-card">
-            <h3>Bar</h3>
-            <ul class="menu-list">
-              <li><span class="menu-dot"></span>Bières — Leffe et sélection pression</li>
-              <li><span class="menu-dot"></span>Vins sélectionnés</li>
-              <li><span class="menu-dot"></span>Cocktails maison</li>
-              <li><span class="menu-dot"></span>À emporter ou sur place</li>
-            </ul>
+          <div class="carte-split">
+            <div class="carte-img">
+              <img src="https://images.unsplash.com/photo-1536935338788-846bb9981813?w=700&q=80&fit=crop" alt="Cocktails bar Pastel Café" loading="lazy">
+            </div>
+            <div class="menu-card">
+              <h3>Bar</h3>
+              <ul class="menu-list">
+                <li><span class="menu-dot"></span>Bières — Leffe et sélection pression</li>
+                <li><span class="menu-dot"></span>Vins sélectionnés</li>
+                <li><span class="menu-dot"></span>Cocktails maison</li>
+                <li><span class="menu-dot"></span>À emporter ou sur place</li>
+              </ul>
+            </div>
           </div>
         </div>
 
         <div class="tab-panel" id="tp-crepes">
-          <div class="menu-card">
-            <h3>Crêperie</h3>
-            <ul class="menu-list">
-              <li><span class="menu-dot"></span>Crêpes dessert maison</li>
-              <li><span class="menu-dot"></span>Garnitures variées au choix</li>
-              <li><span class="menu-dot"></span>Option Sarrasin sans gluten (sur demande)</li>
-            </ul>
-            <span class="badge-gf">🌿 Option sans gluten disponible</span>
+          <div class="carte-split">
+            <div class="carte-img">
+              <img src="https://images.unsplash.com/photo-1519676867240-f03562e64548?w=700&q=80&fit=crop" alt="Crêpes maison Pastel Café" loading="lazy">
+            </div>
+            <div class="menu-card">
+              <h3>Crêperie</h3>
+              <ul class="menu-list">
+                <li><span class="menu-dot"></span>Crêpes dessert maison</li>
+                <li><span class="menu-dot"></span>Garnitures variées au choix</li>
+                <li><span class="menu-dot"></span>Option Sarrasin sans gluten (sur demande)</li>
+              </ul>
+              <span class="badge-gf">🌿 Option sans gluten disponible</span>
+            </div>
           </div>
         </div>
 
         <div class="tab-panel" id="tp-brunch">
-          <div class="menu-card">
-            <h3>Brunch &amp; Planches</h3>
-            <ul class="menu-list">
-              <li><span class="menu-dot"></span>Petits-déjeuners complets</li>
-              <li><span class="menu-dot"></span>Œufs, toasts, jus frais</li>
-              <li><span class="menu-dot"></span>Planches charcuterie</li>
-              <li><span class="menu-dot"></span>Formules variées</li>
-            </ul>
+          <div class="carte-split">
+            <div class="carte-img">
+              <img src="https://images.unsplash.com/photo-1525351484163-7529414344d8?w=700&q=80&fit=crop" alt="Brunch Pastel Café" loading="lazy">
+            </div>
+            <div class="menu-card">
+              <h3>Brunch &amp; Planches</h3>
+              <ul class="menu-list">
+                <li><span class="menu-dot"></span>Petits-déjeuners complets</li>
+                <li><span class="menu-dot"></span>Œufs, toasts, jus frais</li>
+                <li><span class="menu-dot"></span>Planches charcuterie</li>
+                <li><span class="menu-dot"></span>Formules variées</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
