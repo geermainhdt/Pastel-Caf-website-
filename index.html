@@ -566,6 +566,13 @@
       border-radius: var(--r-md);
       color: var(--terra-soft); font-size: .88rem; text-align: center;
     }
+    .nl-error {
+      display: none; padding: .8rem 1rem;
+      background: rgba(220,80,80,.12);
+      border: 1px solid rgba(220,80,80,.4);
+      border-radius: var(--r-md);
+      color: #f08080; font-size: .84rem;
+    }
     @media (max-width: 880px) {
       .contact-grid { grid-template-columns: 1fr; }
       .newsletter-card { padding: 2rem 1.6rem; min-height: auto; }
@@ -1004,23 +1011,22 @@
         <div class="newsletter-card">
           <span class="nl-eyebrow">Newsletter</span>
           <h3>Restez dans l'ambiance Pastel</h3>
-          <p>Nouveautés, événements, offres exclusives — directement dans votre boîte mail.</p>
+          <p>Nouveautés, événements, offres exclusives — directement dans votre boîte mail. Un email de confirmation vous sera envoyé à l'inscription.</p>
 
-          <form class="nl-form" id="nl-form"
-                action="https://formspree.io/f/xpwznvrb"
-                method="POST">
-            <!-- Champ honeypot anti-spam -->
-            <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
-            <input type="hidden" name="_subject" value="Nouvelle inscription newsletter — Pastel Café">
+          <!-- Mailchimp embedded form — remplacez VOTRE_URL_MAILCHIMP par votre URL de liste -->
+          <form class="nl-form" id="nl-form" novalidate>
+            <!-- Anti-spam honeypot Mailchimp (ne pas supprimer) -->
+            <input type="text" name="b_MAILCHIMP_U_MAILCHIMP_ID" tabindex="-1" style="display:none" autocomplete="off">
 
-            <input type="text"  name="name"  placeholder="Votre prénom" required>
-            <input type="email" name="email" placeholder="Votre adresse e-mail" required>
-            <button type="submit" class="nl-submit">S'abonner →</button>
+            <input type="text"  id="nl-fname" name="FNAME" placeholder="Votre prénom">
+            <input type="email" id="nl-email" name="EMAIL" placeholder="Votre adresse e-mail" required>
+            <button type="submit" class="nl-submit" id="nl-btn">S'abonner →</button>
           </form>
 
           <div class="nl-success" id="nl-success">
-            ✓ Merci ! Vous êtes maintenant abonné(e) à notre newsletter.
+            ✓ Merci ! Vérifiez votre boîte mail pour confirmer votre inscription.
           </div>
+          <div class="nl-error" id="nl-error"></div>
         </div>
       </div>
     </div>
@@ -1096,24 +1102,70 @@
     }
 
     /* ── Tabs ── */
-    // Newsletter Formspree AJAX
-    const nlForm = document.getElementById('nl-form');
+    // ── Newsletter Mailchimp JSONP ──
+    // ÉTAPE DE CONFIGURATION :
+    // 1. Créez un compte sur mailchimp.com (gratuit jusqu'à 500 contacts)
+    // 2. Créez une liste/audience "Pastel Café Newsletter"
+    // 3. Allez dans Audience → Signup forms → Embedded forms
+    // 4. Copiez l'URL d'action du formulaire (ex: https://xxx.us1.list-manage.com/subscribe/post?u=abc&id=def)
+    // 5. Remplacez VOTRE_URL_MAILCHIMP ci-dessous par cette URL
+    const MC_URL = 'VOTRE_URL_MAILCHIMP'; // ← remplacer ici
+
+    const nlForm    = document.getElementById('nl-form');
     const nlSuccess = document.getElementById('nl-success');
+    const nlError   = document.getElementById('nl-error');
+    const nlBtn     = document.getElementById('nl-btn');
+
     if (nlForm) {
-      nlForm.addEventListener('submit', async (e) => {
+      nlForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        const data = new FormData(nlForm);
-        try {
-          const res = await fetch(nlForm.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
-          if (res.ok) {
+        if (MC_URL === 'VOTRE_URL_MAILCHIMP') {
+          nlError.textContent = '⚠ Veuillez configurer votre URL Mailchimp (voir commentaire dans le code).';
+          nlError.style.display = 'block';
+          return;
+        }
+        const email = document.getElementById('nl-email').value.trim();
+        const fname = document.getElementById('nl-fname').value.trim();
+        if (!email) return;
+
+        nlBtn.textContent = 'Envoi…';
+        nlBtn.disabled = true;
+
+        // Mailchimp JSONP (contourne CORS sur fichier local)
+        const callbackName = 'mc_cb_' + Date.now();
+        const url = MC_URL.replace('/post?', '/post-json?') +
+                    '&EMAIL=' + encodeURIComponent(email) +
+                    '&FNAME=' + encodeURIComponent(fname) +
+                    '&c=' + callbackName;
+
+        window[callbackName] = (data) => {
+          delete window[callbackName];
+          script.remove();
+          nlBtn.textContent = 'S\'abonner →';
+          nlBtn.disabled = false;
+          if (data.result === 'success') {
             nlForm.style.display = 'none';
             nlSuccess.style.display = 'block';
           } else {
-            alert('Une erreur est survenue. Veuillez réessayer.');
+            const msg = data.msg || 'Une erreur est survenue.';
+            nlError.textContent = msg.includes('already subscribed')
+              ? '⚠ Cette adresse est déjà inscrite.'
+              : '⚠ ' + msg.replace(/<[^>]+>/g, '');
+            nlError.style.display = 'block';
           }
-        } catch {
-          alert('Erreur réseau. Veuillez réessayer.');
-        }
+        };
+
+        const script = document.createElement('script');
+        script.src = url;
+        script.onerror = () => {
+          delete window[callbackName];
+          script.remove();
+          nlBtn.textContent = 'S\'abonner →';
+          nlBtn.disabled = false;
+          nlError.textContent = '⚠ Erreur réseau. Vérifiez votre connexion.';
+          nlError.style.display = 'block';
+        };
+        document.body.appendChild(script);
       });
     }
 
