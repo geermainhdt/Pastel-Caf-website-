@@ -437,6 +437,22 @@
     .masonry-item .overlay span { color: #fff; font-size: .85rem; }
     .masonry-item:hover img { transform: scale(1.04); }
     .masonry-item:hover .overlay { opacity: 1; }
+    /* ── Galerie visual panels ── */
+    .gal-visual {
+      width: 100%; border-radius: var(--r-md);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: .8rem;
+    }
+    .gv-icon  { font-size: 2.8rem; line-height: 1; }
+    .gv-label { font-size: .7rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; opacity: .65; }
+    .gv-coffee    { background: linear-gradient(145deg,#FFF3E8 0%,#D4946A 100%); color: #6A2E08; }
+    .gv-floral    { background: linear-gradient(145deg,#F0F8EC 0%,#78B85C 100%); color: #1E5008; }
+    .gv-shake     { background: linear-gradient(145deg,#F0F4FF 0%,#8098E0 100%); color: #1A2A70; }
+    .gv-interieur { background: linear-gradient(145deg,#FFF0E8 0%,#C87848 100%); color: #602010; }
+    .gv-latte     { background: linear-gradient(145deg,#FFFCE8 0%,#DCC040 100%); color: #503808; }
+    .gv-table     { background: linear-gradient(145deg,#F8F0E8 0%,#B89860 100%); color: #482810; }
+    .gv-plantes   { background: linear-gradient(145deg,#EDFAE8 0%,#58A840 100%); color: #0E3808; }
+    .gv-cozy      { background: linear-gradient(145deg,#FEF6F0 0%,#E0846C 100%); color: #601810; }
     @media (max-width: 880px) { .masonry { columns: 2; } }
     @media (max-width: 500px) { .masonry { columns: 1; } }
 
@@ -660,7 +676,7 @@
           <div>
             <h3>Offre du Jour</h3>
             <div class="price">5,50 €</div>
-            <p>Espresso + dessert vitrine · Mardi au vendredi, 10h – 15h</p>
+            <p>Espresso + dessert vitrine · Mardi au vendredi, 9h – 19h</p>
             <a href="#carte" class="btn btn--light">Voir la carte</a>
           </div>
         </div>
@@ -830,36 +846,44 @@
       </div>
       <div class="masonry">
         <div class="masonry-item">
-          <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=520&q=82&fit=crop" alt="Espresso" loading="lazy">
-          <div class="overlay"><span>L'art de l'espresso</span></div>
+          <div class="gal-visual gv-coffee" style="height:280px" role="img" aria-label="L'art de l'espresso">
+            <span class="gv-icon">☕</span><span class="gv-label">L'art de l'espresso</span>
+          </div>
         </div>
         <div class="masonry-item">
-          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=520&q=82&fit=crop&h=380" alt="Décor floral" loading="lazy">
-          <div class="overlay"><span>Décor botanique</span></div>
+          <div class="gal-visual gv-floral" style="height:340px" role="img" aria-label="Décor botanique">
+            <span class="gv-icon">🌿</span><span class="gv-label">Décor botanique</span>
+          </div>
         </div>
         <div class="masonry-item">
-          <img src="https://images.unsplash.com/photo-1572490122747-3e9b3a54c78a?w=520&q=82&fit=crop&h=300" alt="Milkshake" loading="lazy">
-          <div class="overlay"><span>Milkshake maison</span></div>
+          <div class="gal-visual gv-shake" style="height:260px" role="img" aria-label="Milkshake maison">
+            <span class="gv-icon">🥤</span><span class="gv-label">Milkshake maison</span>
+          </div>
         </div>
         <div class="masonry-item">
-          <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=520&q=82&fit=crop&h=420" alt="Café intérieur" loading="lazy">
-          <div class="overlay"><span>Notre espace</span></div>
+          <div class="gal-visual gv-interieur" style="height:380px" role="img" aria-label="Notre espace">
+            <span class="gv-icon">🏠</span><span class="gv-label">Notre espace</span>
+          </div>
         </div>
         <div class="masonry-item">
-          <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=520&q=82&fit=crop" alt="Latte art" loading="lazy">
-          <div class="overlay"><span>Latte art</span></div>
+          <div class="gal-visual gv-latte" style="height:300px" role="img" aria-label="Latte art">
+            <span class="gv-icon">🫶</span><span class="gv-label">Latte art</span>
+          </div>
         </div>
         <div class="masonry-item">
-          <img src="https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?w=520&q=82&fit=crop&h=350" alt="Table dressée" loading="lazy">
-          <div class="overlay"><span>Table dressée</span></div>
+          <div class="gal-visual gv-table" style="height:320px" role="img" aria-label="Table dressée">
+            <span class="gv-icon">🍽️</span><span class="gv-label">Table dressée</span>
+          </div>
         </div>
         <div class="masonry-item">
-          <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=520&q=82&fit=crop&h=300" alt="Plantes" loading="lazy">
-          <div class="overlay"><span>Ambiance verte</span></div>
+          <div class="gal-visual gv-plantes" style="height:260px" role="img" aria-label="Ambiance verte">
+            <span class="gv-icon">🌱</span><span class="gv-label">Ambiance verte</span>
+          </div>
         </div>
         <div class="masonry-item">
-          <img src="https://images.unsplash.com/photo-1464454709131-ffd692591ee5?w=520&q=82&fit=crop&h=400" alt="Café cozy" loading="lazy">
-          <div class="overlay"><span>Moment cozy</span></div>
+          <div class="gal-visual gv-cozy" style="height:360px" role="img" aria-label="Moment cozy">
+            <span class="gv-icon">🕯️</span><span class="gv-label">Moment cozy</span>
+          </div>
         </div>
       </div>
     </div>
@@ -908,9 +932,9 @@
 
           <table class="horaires">
             <tr><td>Lundi</td><td>Fermé</td></tr>
-            <tr><td>Mardi – Vendredi</td><td>10h00 – 15h00</td></tr>
-            <tr><td>Samedi – Dimanche</td><td>Nous contacter</td></tr>
-            <tr><td>Soirées événements</td><td>Jusqu'à 22h00</td></tr>
+            <tr><td>Mardi – Vendredi</td><td>09h00 – 19h00</td></tr>
+            <tr><td>Samedi</td><td>09h00 – 20h00</td></tr>
+            <tr><td>Dimanche</td><td>09h00 – 16h00</td></tr>
           </table>
 
           <div class="rating">
@@ -1017,7 +1041,12 @@
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
         btn.classList.add('active');
-        document.getElementById('tp-' + btn.dataset.tab).classList.add('active');
+        const panel = document.getElementById('tp-' + btn.dataset.tab);
+        panel.classList.add('active');
+        // Sur mobile : scroll doux vers le contenu de l'onglet
+        if (window.innerWidth < 880) {
+          setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+        }
       });
     });
   </script>
