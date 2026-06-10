@@ -512,16 +512,63 @@
     .stars { color: var(--terra); letter-spacing: .08rem; }
     .rating p { font-size: .82rem; color: var(--muted); }
 
-    .map-frame {
+    /* ── Newsletter card ── */
+    .newsletter-card {
+      background: var(--ink);
       border-radius: var(--r-lg);
-      overflow: hidden;
-      border: 1px solid var(--line);
+      padding: 2.8rem 2.4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1.4rem;
+      min-height: 340px;
     }
-    .map-frame iframe { display: block; width: 100%; height: 480px; border: none; }
-
+    .newsletter-card .nl-eyebrow {
+      font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--terra-soft); font-weight: 500;
+    }
+    .newsletter-card h3 { color: #fff; font-size: 1.5rem; font-weight: 400; line-height: 1.3; }
+    .newsletter-card p  { color: rgba(255,255,255,.55); font-size: .88rem; line-height: 1.65; }
+    .nl-form { display: flex; flex-direction: column; gap: .75rem; margin-top: .4rem; }
+    .nl-form input[type="email"] {
+      width: 100%; padding: .85rem 1.1rem;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: var(--r-pill);
+      color: #fff; font-family: var(--ff); font-size: .9rem;
+      outline: none; transition: border-color .2s;
+    }
+    .nl-form input[type="email"]::placeholder { color: rgba(255,255,255,.35); }
+    .nl-form input[type="email"]:focus { border-color: var(--terra-soft); }
+    .nl-form input[type="text"] {
+      width: 100%; padding: .85rem 1.1rem;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: var(--r-pill);
+      color: #fff; font-family: var(--ff); font-size: .9rem;
+      outline: none; transition: border-color .2s;
+    }
+    .nl-form input[type="text"]::placeholder { color: rgba(255,255,255,.35); }
+    .nl-form input[type="text"]:focus { border-color: var(--terra-soft); }
+    .nl-submit {
+      padding: .85rem 1.6rem;
+      background: var(--terra); color: #fff;
+      border: none; border-radius: var(--r-pill);
+      font-family: var(--ff); font-size: .88rem; font-weight: 500;
+      letter-spacing: .06em; cursor: pointer;
+      transition: background .25s, transform .15s;
+    }
+    .nl-submit:hover { background: #b5724d; transform: translateY(-1px); }
+    .nl-success {
+      display: none; padding: 1rem 1.2rem;
+      background: rgba(200,130,90,.15);
+      border: 1px solid var(--terra-soft);
+      border-radius: var(--r-md);
+      color: var(--terra-soft); font-size: .88rem; text-align: center;
+    }
     @media (max-width: 880px) {
       .contact-grid { grid-template-columns: 1fr; }
-      .map-frame iframe { height: 340px; }
+      .newsletter-card { padding: 2rem 1.6rem; min-height: auto; }
     }
 
     /* ════════════════════════
@@ -954,13 +1001,26 @@
           </div>
         </div>
 
-        <div class="map-frame">
-          <iframe
-            src="https://maps.google.com/maps?q=3+bis+rue+Napol%C3%A9on+60200+Compi%C3%A8gne+France&t=&z=16&ie=UTF8&iwloc=&output=embed"
-            allowfullscreen loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            title="Pastel Café — 3 bis rue Napoléon, Compiègne"
-          ></iframe>
+        <div class="newsletter-card">
+          <span class="nl-eyebrow">Newsletter</span>
+          <h3>Restez dans l'ambiance Pastel</h3>
+          <p>Nouveautés, événements, offres exclusives — directement dans votre boîte mail.</p>
+
+          <form class="nl-form" id="nl-form"
+                action="https://formspree.io/f/xpwznvrb"
+                method="POST">
+            <!-- Champ honeypot anti-spam -->
+            <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+            <input type="hidden" name="_subject" value="Nouvelle inscription newsletter — Pastel Café">
+
+            <input type="text"  name="name"  placeholder="Votre prénom" required>
+            <input type="email" name="email" placeholder="Votre adresse e-mail" required>
+            <button type="submit" class="nl-submit">S'abonner →</button>
+          </form>
+
+          <div class="nl-success" id="nl-success">
+            ✓ Merci ! Vous êtes maintenant abonné(e) à notre newsletter.
+          </div>
         </div>
       </div>
     </div>
@@ -1036,6 +1096,27 @@
     }
 
     /* ── Tabs ── */
+    // Newsletter Formspree AJAX
+    const nlForm = document.getElementById('nl-form');
+    const nlSuccess = document.getElementById('nl-success');
+    if (nlForm) {
+      nlForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = new FormData(nlForm);
+        try {
+          const res = await fetch(nlForm.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+          if (res.ok) {
+            nlForm.style.display = 'none';
+            nlSuccess.style.display = 'block';
+          } else {
+            alert('Une erreur est survenue. Veuillez réessayer.');
+          }
+        } catch {
+          alert('Erreur réseau. Veuillez réessayer.');
+        }
+      });
+    }
+
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
