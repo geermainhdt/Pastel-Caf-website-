@@ -9,1293 +9,735 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    /* ─── RESET ─── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-
-    /* ─── TOKENS ─── */
     :root {
-      --bg:        #FAF9F6;
-      --white:     #FFFFFF;
-      --beige:     #F1EDE6;
-      --sand:      #E7E0D5;
-      --terra:     #C8825A;
-      --terra-soft:#E8C4A8;
-      --ink:       #161412;
-      --muted:     #6F6A63;
-      --line:      rgba(22,20,18,.08);
-      --r-lg: 24px;
-      --r-md: 18px;
-      --r-pill: 100px;
-      --ff: 'Jost', sans-serif;
+      --bg:#FAF9F6; --white:#FFFFFF; --beige:#F1EDE6; --sand:#E7E0D5;
+      --terra:#C8825A; --terra-soft:#E8C4A8; --ink:#161412; --muted:#6F6A63;
+      --line:rgba(22,20,18,.08); --r-lg:24px; --r-md:18px; --r-pill:100px;
+      --ff:'Jost',sans-serif;
     }
+    body { background:var(--bg); color:var(--ink); font-family:var(--ff); font-weight:300; line-height:1.7; overflow-x:hidden; }
+    img { max-width:100%; display:block; }
+    a { color:inherit; text-decoration:none; }
+    button { font-family:var(--ff); }
+    .container { max-width:1140px; margin:0 auto; padding:0 1.4rem; }
+    .btn { display:inline-flex; align-items:center; gap:.5rem; padding:.72rem 1.7rem; border-radius:var(--r-pill); font-size:.85rem; font-weight:400; letter-spacing:.02em; transition:opacity .25s,background .25s,color .25s; border:none; cursor:pointer; }
+    .btn--dark { background:var(--ink); color:#fff; }
+    .btn--dark:hover { opacity:.82; }
+    .btn--light { background:#fff; color:var(--ink); border:1px solid var(--line); }
+    .btn--light:hover { background:var(--beige); }
+    .btn--terra { background:var(--terra); color:#fff; }
+    .btn--terra:hover { opacity:.88; }
+    .h-xl { font-size:clamp(2.3rem,6vw,3.8rem); font-weight:400; line-height:1.08; letter-spacing:-.02em; }
+    .h-lg { font-size:clamp(1.7rem,4vw,2.5rem); font-weight:400; line-height:1.15; letter-spacing:-.015em; }
+    .sub { color:var(--muted); font-size:.98rem; }
+    .reveal { opacity:1; transform:none; transition:opacity .8s ease,transform .8s ease; }
+    .reveal.will-animate { opacity:0; transform:translateY(20px); }
+    .reveal.in { opacity:1; transform:none; }
 
-    body {
-      background: var(--bg);
-      color: var(--ink);
-      font-family: var(--ff);
-      font-weight: 300;
-      line-height: 1.7;
-      overflow-x: hidden;
-    }
-    img { max-width: 100%; display: block; }
-    a   { color: inherit; text-decoration: none; }
-    button { font-family: var(--ff); }
+    /* NAV */
+    #nav { position:fixed; inset:0 0 auto; z-index:900; background:rgba(250,249,246,.92); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border-bottom:1px solid transparent; transition:border-color .3s; }
+    #nav.scrolled { border-color:var(--line); }
+    .nav-inner { max-width:1140px; margin:0 auto; padding:.7rem 1.4rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+    .nav-brand { display:flex; align-items:center; gap:.65rem; }
+    .nav-logo-img { width:42px; height:42px; border-radius:50%; object-fit:cover; display:block; }
+    .nav-brand span { font-weight:500; font-size:1.05rem; letter-spacing:-.01em; }
+    .nav-links { list-style:none; display:flex; gap:1.9rem; align-items:center; }
+    .nav-links a { font-size:.82rem; font-weight:400; color:var(--muted); transition:color .25s; }
+    .nav-links a:hover { color:var(--ink); }
+    .nav-cta { white-space:nowrap; }
+    .burger { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:8px; }
+    .burger span { display:block; width:22px; height:1.6px; background:var(--ink); transition:.3s; border-radius:2px; }
+    .burger.open span:nth-child(1) { transform:rotate(45deg) translate(4px,4px); }
+    .burger.open span:nth-child(2) { opacity:0; }
+    .burger.open span:nth-child(3) { transform:rotate(-45deg) translate(4px,-4px); }
+    @media (max-width:880px) { .nav-links,.nav-cta { display:none; } .burger { display:flex; } }
+    .mobile-nav { position:fixed; inset:0; background:var(--bg); z-index:850; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2.2rem; opacity:0; pointer-events:none; transition:opacity .3s; }
+    .mobile-nav.open { opacity:1; pointer-events:all; }
+    .mobile-nav a { font-size:1.6rem; font-weight:400; color:var(--ink); }
 
-    .container { max-width: 1140px; margin: 0 auto; padding: 0 1.4rem; }
+    /* HERO */
+    #hero { padding:7.5rem 0 3rem; }
+    .hero-grid { display:grid; grid-template-columns:1.5fr 1fr; gap:3rem; align-items:center; margin-bottom:2.2rem; }
+    .hero-copy .h-xl { max-width:560px; }
+    .hero-copy .sub { margin-top:1.1rem; max-width:420px; }
+    .hero-actions { display:flex; gap:.8rem; margin-top:1.8rem; flex-wrap:wrap; }
+    .hero-perks { list-style:none; display:flex; flex-direction:column; gap:.85rem; justify-self:end; }
+    .hero-perks li { display:flex; align-items:center; gap:.65rem; font-size:.88rem; color:var(--muted); }
+    .perk-ico { width:26px; height:26px; border-radius:50%; background:var(--beige); display:flex; align-items:center; justify-content:center; font-size:.72rem; flex-shrink:0; }
+    @media (max-width:880px) { #hero { padding:6.2rem 0 2rem; } .hero-grid { grid-template-columns:1fr; gap:2.2rem; } .hero-perks { justify-self:start; } }
 
-    /* ─── BOUTONS ─── */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      padding: .72rem 1.7rem;
-      border-radius: var(--r-pill);
-      font-size: .85rem;
-      font-weight: 400;
-      letter-spacing: .02em;
-      transition: opacity .25s, background .25s, color .25s;
-      border: none;
-      cursor: pointer;
-    }
-    .btn--dark  { background: var(--ink); color: #fff; }
-    .btn--dark:hover  { opacity: .82; }
-    .btn--light { background: #fff; color: var(--ink); border: 1px solid var(--line); }
-    .btn--light:hover { background: var(--beige); }
+    /* BENTO */
+    .bento { display:grid; grid-template-columns:1.45fr 1fr; gap:1.1rem; }
+    .bento-card { border-radius:var(--r-lg); overflow:hidden; position:relative; min-height:340px; display:flex; flex-direction:column; justify-content:flex-end; padding:1.8rem; }
+    .bento-card--photo { background:var(--sand); }
+    .bento-card--photo img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    .bento-card--photo::after { content:''; position:absolute; inset:0; background:linear-gradient(to top,rgba(0,0,0,.55) 0%,transparent 55%); }
+    .bento-card--photo > * { position:relative; z-index:2; }
+    .bento-card--photo h3 { color:#fff; font-size:1.5rem; font-weight:400; }
+    .bento-card--photo p { color:rgba(255,255,255,.85); font-size:.88rem; margin:.3rem 0 1.1rem; }
+    .bento-card--terra { background:linear-gradient(150deg,var(--terra-soft) 0%,var(--terra) 100%); color:#fff; justify-content:space-between; }
+    .bento-logo { width:110px; height:110px; border-radius:50%; object-fit:cover; box-shadow:0 12px 36px rgba(0,0,0,.18); }
+    .bento-card--terra h3 { font-size:1.5rem; font-weight:400; margin-top:1.2rem; }
+    .bento-card--terra .price { font-size:2.2rem; font-weight:500; margin:.2rem 0 .4rem; }
+    .bento-card--terra p { font-size:.87rem; opacity:.92; margin-bottom:1.1rem; }
+    @media (max-width:880px) { .bento { grid-template-columns:1fr; } .bento-card { min-height:300px; } }
 
-    /* ─── TYPE ─── */
-    .h-xl {
-      font-size: clamp(2.3rem, 6vw, 3.8rem);
-      font-weight: 400;
-      line-height: 1.08;
-      letter-spacing: -.02em;
-    }
-    .h-lg {
-      font-size: clamp(1.7rem, 4vw, 2.5rem);
-      font-weight: 400;
-      line-height: 1.15;
-      letter-spacing: -.015em;
-    }
-    .sub { color: var(--muted); font-size: .98rem; }
+    /* MINIS */
+    .minis { display:grid; grid-template-columns:repeat(3,1fr); gap:1.1rem; margin-top:1.1rem; }
+    .mini { background:var(--white); border:1px solid var(--line); border-radius:var(--r-md); padding:1.1rem 1.3rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; transition:transform .3s,box-shadow .3s; }
+    .mini:hover { transform:translateY(-3px); box-shadow:0 14px 36px rgba(22,20,18,.07); }
+    .mini-txt strong { display:block; font-weight:500; font-size:.92rem; }
+    .mini-txt span { font-size:.78rem; color:var(--muted); }
+    .mini-arrow { width:30px; height:30px; border-radius:50%; background:var(--beige); display:flex; align-items:center; justify-content:center; font-size:.8rem; flex-shrink:0; }
+    @media (max-width:880px) { .minis { grid-template-columns:1fr; } }
 
-    /* ─── REVEAL ─── */
-    .reveal { opacity: 1; transform: none; transition: opacity .8s ease, transform .8s ease; }
-    .reveal.will-animate { opacity: 0; transform: translateY(20px); }
-    .reveal.in { opacity: 1; transform: none; }
-    .reveal.d1 { transition-delay: .1s; }
-    .reveal.d2 { transition-delay: .2s; }
-    .reveal.d3 { transition-delay: .3s; }
+    /* SECTIONS */
+    .section { padding:5.5rem 0; }
+    .section-head { max-width:560px; margin-bottom:3rem; }
+    .eyebrow { display:inline-block; padding:.3rem 1rem; border-radius:var(--r-pill); background:var(--beige); font-size:.72rem; font-weight:400; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:1.1rem; }
+    .section-head .sub { margin-top:.8rem; }
 
-    /* ════════════════════════
-       NAV
-    ════════════════════════ */
-    #nav {
-      position: fixed;
-      inset: 0 0 auto;
-      z-index: 900;
-      background: rgba(250,249,246,.92);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid transparent;
-      transition: border-color .3s;
-    }
-    #nav.scrolled { border-color: var(--line); }
-    .nav-inner {
-      max-width: 1140px;
-      margin: 0 auto;
-      padding: .7rem 1.4rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-    }
-    .nav-brand { display: flex; align-items: center; gap: .65rem; }
-    .nav-logo-img {
-      width: 42px; height: 42px;
-      border-radius: 50%;
-      object-fit: cover;
-      display: block;
-    }
-    .nav-brand span { font-weight: 500; font-size: 1.05rem; letter-spacing: -.01em; }
+    /* HISTOIRE */
+    .histoire-grid { display:grid; grid-template-columns:1fr 1fr; gap:3.5rem; align-items:center; }
+    .histoire-text p { color:var(--muted); font-size:.95rem; margin-top:1.2rem; }
+    .tags { display:flex; flex-wrap:wrap; gap:.45rem; margin-top:1.8rem; }
+    .tag { padding:.26rem 1rem; border-radius:var(--r-pill); background:var(--beige); font-size:.74rem; color:var(--muted); }
+    .histoire-photo img { width:100%; height:470px; object-fit:cover; border-radius:var(--r-lg); }
+    @media (max-width:880px) { .histoire-grid { grid-template-columns:1fr; gap:2.2rem; } .histoire-photo img { height:320px; } }
 
-    .nav-links {
-      list-style: none;
-      display: flex;
-      gap: 1.9rem;
-      align-items: center;
-    }
-    .nav-links a {
-      font-size: .82rem;
-      font-weight: 400;
-      color: var(--muted);
-      transition: color .25s;
-    }
-    .nav-links a:hover { color: var(--ink); }
-    .nav-cta { white-space: nowrap; }
+    /* CARTE */
+    #carte { background:var(--white); border-radius:var(--r-lg); margin:0 1rem; }
+    @media (min-width:1200px) { #carte { margin:0 auto; max-width:1240px; } }
+    .tabs { display:flex; flex-wrap:nowrap; gap:.5rem; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; margin-bottom:2.4rem; padding-bottom:.3rem; }
+    .tabs::-webkit-scrollbar { display:none; }
+    .tab-btn { background:var(--beige); border:none; border-radius:var(--r-pill); padding:.55rem 1.4rem; font-size:.82rem; font-weight:400; color:var(--muted); cursor:pointer; white-space:nowrap; transition:background .25s,color .25s; }
+    .tab-btn.active { background:var(--ink); color:#fff; }
+    .tab-panel { display:none; }
+    .tab-panel.active { display:block; }
+    .menu-card { background:var(--bg); border-radius:var(--r-md); padding:1.9rem 2rem; max-width:620px; }
+    .menu-card h3 { font-weight:500; font-size:1.15rem; margin-bottom:1.1rem; }
+    .menu-list { list-style:none; }
+    .menu-list li { display:flex; align-items:center; gap:.8rem; padding:.62rem 0; border-bottom:1px solid var(--line); font-size:.9rem; }
+    .menu-list li:last-child { border:none; }
+    .menu-dot { width:4px; height:4px; border-radius:50%; background:var(--terra); flex-shrink:0; }
+    .badge-gf { display:inline-block; margin-top:1.1rem; padding:.3rem 1rem; border-radius:var(--r-pill); background:var(--beige); font-size:.74rem; color:var(--muted); }
 
-    .burger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      background: none; border: none;
-      cursor: pointer; padding: 8px;
-    }
-    .burger span {
-      display: block;
-      width: 22px; height: 1.6px;
-      background: var(--ink);
-      transition: .3s;
-      border-radius: 2px;
-    }
-    .burger.open span:nth-child(1) { transform: rotate(45deg) translate(4px,4px); }
-    .burger.open span:nth-child(2) { opacity: 0; }
-    .burger.open span:nth-child(3) { transform: rotate(-45deg) translate(4px,-4px); }
+    /* GALERIE */
+    .masonry { columns:3; column-gap:1rem; }
+    .masonry-item { break-inside:avoid; margin-bottom:1rem; position:relative; overflow:hidden; border-radius:var(--r-md); }
+    .gal-visual { width:100%; border-radius:var(--r-md); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.8rem; }
+    .gv-icon { font-size:2.8rem; line-height:1; }
+    .gv-label { font-size:.7rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; opacity:.65; }
+    .gv-coffee { background:linear-gradient(145deg,#FFF3E8 0%,#D4946A 100%); color:#6A2E08; }
+    .gv-floral { background:linear-gradient(145deg,#F0F8EC 0%,#78B85C 100%); color:#1E5008; }
+    .gv-shake { background:linear-gradient(145deg,#F0F4FF 0%,#8098E0 100%); color:#1A2A70; }
+    .gv-interieur { background:linear-gradient(145deg,#FFF0E8 0%,#C87848 100%); color:#602010; }
+    .gv-latte { background:linear-gradient(145deg,#FFFCE8 0%,#DCC040 100%); color:#503808; }
+    .gv-table { background:linear-gradient(145deg,#F8F0E8 0%,#B89860 100%); color:#482810; }
+    .gv-plantes { background:linear-gradient(145deg,#EDFAE8 0%,#58A840 100%); color:#0E3808; }
+    .gv-cozy { background:linear-gradient(145deg,#FEF6F0 0%,#E0846C 100%); color:#601810; }
+    @media (max-width:880px) { .masonry { columns:2; } }
+    @media (max-width:500px) { .masonry { columns:1; } }
 
-    @media (max-width: 880px) {
-      .nav-links, .nav-cta { display: none; }
-      .burger { display: flex; }
-    }
+    /* CONTACT */
+    .contact-grid { display:grid; grid-template-columns:1fr 1.15fr; gap:2.5rem; align-items:start; }
+    .contact-card { background:var(--white); border:1px solid var(--line); border-radius:var(--r-lg); padding:2rem; }
+    .info-row { display:flex; gap:1rem; padding:.85rem 0; border-bottom:1px solid var(--line); align-items:flex-start; }
+    .info-row:last-of-type { border:none; }
+    .info-ico { width:36px; height:36px; border-radius:50%; background:var(--beige); display:flex; align-items:center; justify-content:center; font-size:.85rem; flex-shrink:0; }
+    .info-body { font-size:.89rem; }
+    .info-lbl { display:block; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+    .info-body a { color:var(--terra); }
+    .horaires { width:100%; border-collapse:collapse; margin-top:.4rem; }
+    .horaires td { padding:.5rem 0; font-size:.87rem; border-bottom:1px solid var(--line); }
+    .horaires td:first-child { color:var(--muted); padding-right:1rem; }
+    .horaires tr:last-child td { border:none; }
+    .rating { display:flex; align-items:center; gap:.8rem; margin-top:1.4rem; padding:.9rem 1.2rem; border-radius:var(--r-md); background:var(--beige); }
+    .stars { color:var(--terra); letter-spacing:.08rem; }
+    .rating p { font-size:.82rem; color:var(--muted); }
 
-    .mobile-nav {
-      position: fixed;
-      inset: 0;
-      background: var(--bg);
-      z-index: 850;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 2.2rem;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .3s;
-    }
-    .mobile-nav.open { opacity: 1; pointer-events: all; }
-    .mobile-nav a {
-      font-size: 1.6rem;
-      font-weight: 400;
-      color: var(--ink);
-    }
-    .mobile-nav a:active { color: var(--terra); }
+    /* NEWSLETTER */
+    .newsletter-card { background:var(--ink); border-radius:var(--r-lg); padding:2.8rem 2.4rem; display:flex; flex-direction:column; justify-content:center; gap:1.4rem; min-height:340px; }
+    .newsletter-card .nl-eyebrow { font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; color:var(--terra-soft); font-weight:500; }
+    .newsletter-card h3 { color:#fff; font-size:1.5rem; font-weight:400; line-height:1.3; }
+    .newsletter-card p { color:rgba(255,255,255,.55); font-size:.88rem; line-height:1.65; }
+    .nl-form { display:flex; flex-direction:column; gap:.75rem; margin-top:.4rem; }
+    .nl-form input { width:100%; padding:.85rem 1.1rem; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.15); border-radius:var(--r-pill); color:#fff; font-family:var(--ff); font-size:.9rem; outline:none; transition:border-color .2s; }
+    .nl-form input::placeholder { color:rgba(255,255,255,.35); }
+    .nl-form input:focus { border-color:var(--terra-soft); }
+    .nl-submit { padding:.85rem 1.6rem; background:var(--terra); color:#fff; border:none; border-radius:var(--r-pill); font-family:var(--ff); font-size:.88rem; font-weight:500; letter-spacing:.06em; cursor:pointer; }
+    .nl-submit:hover { background:#b5724d; }
+    .nl-success { display:none; padding:1rem 1.2rem; background:rgba(200,130,90,.15); border:1px solid var(--terra-soft); border-radius:var(--r-md); color:var(--terra-soft); font-size:.88rem; text-align:center; }
+    .nl-error { display:none; padding:.8rem 1rem; background:rgba(220,80,80,.12); border:1px solid rgba(220,80,80,.4); border-radius:var(--r-md); color:#f08080; font-size:.84rem; }
+    @media (max-width:880px) { .contact-grid { grid-template-columns:1fr; } .newsletter-card { padding:2rem 1.6rem; min-height:auto; } }
 
-    /* ════════════════════════
-       HERO
-    ════════════════════════ */
-    #hero { padding: 7.5rem 0 3rem; }
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.5fr 1fr;
-      gap: 3rem;
-      align-items: center;
-      margin-bottom: 2.2rem;
-    }
-    .hero-copy .h-xl { max-width: 560px; }
-    .hero-copy .sub { margin-top: 1.1rem; max-width: 420px; }
-    .hero-actions { display: flex; gap: .8rem; margin-top: 1.8rem; flex-wrap: wrap; }
+    /* FOOTER */
+    footer { background:var(--ink); color:rgba(255,255,255,.65); border-radius:var(--r-lg) var(--r-lg) 0 0; margin-top:3rem; padding:3.5rem 1.4rem 2rem; }
+    .footer-inner { max-width:1140px; margin:0 auto; }
+    .footer-top { display:flex; align-items:center; justify-content:space-between; gap:1.5rem; flex-wrap:wrap; padding-bottom:2rem; border-bottom:1px solid rgba(255,255,255,.1); }
+    .footer-brand { display:flex; align-items:center; gap:.8rem; }
+    .footer-logo-img { width:52px; height:52px; border-radius:50%; object-fit:cover; }
+    .footer-brand strong { color:#fff; font-weight:500; font-size:1.05rem; display:block; }
+    .footer-brand span { font-size:.8rem; }
+    .footer-links { display:flex; flex-wrap:wrap; gap:1.4rem; }
+    .footer-links a { font-size:.82rem; transition:color .25s; }
+    .footer-links a:hover { color:#fff; }
+    .footer-bottom { display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; padding-top:1.6rem; font-size:.76rem; color:rgba(255,255,255,.4); }
+    .footer-socials { display:flex; gap:.6rem; }
+    .s-btn { width:36px; height:36px; border:1px solid rgba(255,255,255,.16); border-radius:50%; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.6); transition:border-color .25s,color .25s; }
+    .s-btn:hover { border-color:#fff; color:#fff; }
 
-    .hero-perks {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: .85rem;
-      justify-self: end;
-    }
-    .hero-perks li {
-      display: flex;
-      align-items: center;
-      gap: .65rem;
-      font-size: .88rem;
-      color: var(--muted);
-    }
-    .perk-ico {
-      width: 26px; height: 26px;
-      border-radius: 50%;
-      background: var(--beige);
-      display: flex; align-items: center; justify-content: center;
-      font-size: .72rem;
-      flex-shrink: 0;
-    }
+    /* CARTE SPLIT */
+    .carte-split { display:grid; grid-template-columns:1fr 1fr; gap:1.8rem; align-items:start; }
+    .carte-visual { width:100%; height:360px; border-radius:var(--r-md); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.9rem; }
+    .cv-icon { font-size:3.8rem; line-height:1; }
+    .cv-label { font-size:.72rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; opacity:.65; }
+    .cv-chaudes { background:linear-gradient(145deg,#FFF3E8 0%,#E8A870 100%); color:#7A3810; }
+    .cv-froides { background:linear-gradient(145deg,#E4F4F8 0%,#78BED0 100%); color:#185468; }
+    .cv-bar { background:linear-gradient(145deg,#F8F0E4 0%,#C08040 100%); color:#502A08; }
+    .cv-crepes { background:linear-gradient(145deg,#FFFCE4 0%,#E8C040 100%); color:#503E08; }
+    .cv-brunch { background:linear-gradient(145deg,#EEF6EA 0%,#80B868 100%); color:#1A4808; }
+    @media (max-width:880px) { .carte-split { grid-template-columns:1fr; } .carte-visual { height:200px; } .cv-icon { font-size:2.8rem; } }
 
-    @media (max-width: 880px) {
-      #hero { padding: 6.2rem 0 2rem; }
-      .hero-grid { grid-template-columns: 1fr; gap: 2.2rem; }
-      .hero-perks { justify-self: start; }
-    }
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+    @keyframes scaleIn { from { opacity:0; transform:scale(.9); } to { opacity:1; transform:scale(1); } }
+    @keyframes slideDown { from { opacity:0; transform:translateY(-16px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes floatY { 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-7px); } }
+    #nav { animation:slideDown .55s cubic-bezier(.2,.8,.2,1) both; }
+    .hero-copy h1 { animation:fadeUp .8s cubic-bezier(.2,.8,.2,1) .15s both; }
+    .hero-copy .sub { animation:fadeUp .7s ease .35s both; }
+    .hero-actions { animation:fadeUp .7s ease .5s both; }
+    .hero-perks { animation:fadeIn .9s ease .6s both; }
+    .bento-card { animation:scaleIn .7s cubic-bezier(.2,.8,.2,1) both; transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s ease; }
+    .bento > .bento-card:nth-child(1) { animation-delay:.2s; }
+    .bento > .bento-card:nth-child(2) { animation-delay:.35s; }
+    .bento-card:hover { transform:translateY(-4px); box-shadow:0 16px 40px rgba(22,20,18,.1); }
+    .bento-logo { animation:floatY 4s ease-in-out 1.2s infinite; }
+    .anim { transition:opacity .75s ease,transform .75s cubic-bezier(.2,.8,.2,1); }
+    .anim.hidden { opacity:0; transform:translateY(22px); }
+    .tab-panel.active { animation:fadeIn .35s ease both; }
+    .masonry-item { transition:transform .35s ease; }
+    .masonry-item:hover { transform:scale(1.02); }
+    .gal-visual { transition:filter .3s ease; }
+    .masonry-item:hover .gal-visual { filter:brightness(1.06); }
+    .carte-visual { transition:filter .3s ease,transform .3s ease; }
+    .carte-visual:hover { filter:brightness(1.06); transform:scale(1.01); }
+    .info-row { transition:background .25s ease; border-radius:10px; padding:.1rem .3rem; margin:0 -.3rem; }
+    .info-row:hover { background:var(--beige); }
+    .nl-submit { transition:background .25s ease,transform .2s ease,box-shadow .2s ease; }
+    .nl-submit:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(200,130,90,.35); }
 
-    /* ── Bento ── */
-    .bento {
-      display: grid;
-      grid-template-columns: 1.45fr 1fr;
-      gap: 1.1rem;
-    }
-    .bento-card {
-      border-radius: var(--r-lg);
-      overflow: hidden;
-      position: relative;
-      min-height: 340px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 1.8rem;
-    }
-    .bento-card--photo {
-      background: var(--sand);
-    }
-    .bento-card--photo img {
-      position: absolute;
-      inset: 0;
-      width: 100%; height: 100%;
-      object-fit: cover;
-    }
-    .bento-card--photo::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,.55) 0%, transparent 55%);
-    }
-    .bento-card--photo > * { position: relative; z-index: 2; }
-    .bento-card--photo h3 { color: #fff; font-size: 1.5rem; font-weight: 400; }
-    .bento-card--photo p  { color: rgba(255,255,255,.85); font-size: .88rem; margin: .3rem 0 1.1rem; }
+    /* TICKER */
+    @keyframes ticker { to { transform:translateX(-50%); } }
+    .ticker-wrap { overflow:hidden; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:.75rem 0; margin:2rem 0 0; user-select:none; }
+    .ticker-belt { display:flex; width:max-content; animation:ticker 24s linear infinite; }
+    .ticker-belt:hover { animation-play-state:paused; }
+    .ticker-track { display:flex; align-items:center; gap:2rem; padding-right:2rem; white-space:nowrap; font-size:.78rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+    .ticker-dot { color:var(--terra); font-size:1rem; line-height:1; }
 
-    .bento-card--terra {
-      background: linear-gradient(150deg, var(--terra-soft) 0%, var(--terra) 100%);
-      color: #fff;
-      justify-content: space-between;
-    }
-    .bento-logo {
-      width: 110px; height: 110px;
-      border-radius: 50%;
-      object-fit: cover;
-      box-shadow: 0 12px 36px rgba(0,0,0,.18);
-    }
-    .bento-card--terra h3 { font-size: 1.5rem; font-weight: 400; margin-top: 1.2rem; }
-    .bento-card--terra .price { font-size: 2.2rem; font-weight: 500; margin: .2rem 0 .4rem; }
-    .bento-card--terra p { font-size: .87rem; opacity: .92; margin-bottom: 1.1rem; }
-    .bento-card--terra .btn--light { border: none; }
+    /* PULL-QUOTE */
+    .pull-quote { border-left:3px solid var(--terra-soft); margin:2rem 0 1.8rem; padding:.6rem 0 .6rem 1.4rem; }
+    .pull-quote p { font-size:1.15rem; font-weight:300; font-style:italic; line-height:1.6; color:var(--ink); }
+    .pq-author { display:block; margin-top:.5rem; font-size:.75rem; letter-spacing:.12em; text-transform:uppercase; color:var(--terra); font-style:normal; font-weight:500; }
 
-    @media (max-width: 880px) {
-      .bento { grid-template-columns: 1fr; }
-      .bento-card { min-height: 300px; }
-    }
+    /* ENGAGEMENTS */
+    .engagements { background:var(--ink); padding:4rem 0; }
+    .engage-grid { display:grid; grid-template-columns:repeat(3,1fr); }
+    .engage-item { padding:2.4rem 2rem; background:var(--ink); text-align:center; border-right:1px solid rgba(255,255,255,.07); transition:background .3s ease; }
+    .engage-item:last-child { border-right:none; }
+    .engage-item:hover { background:#1f1d1a; }
+    .engage-ico { font-size:2rem; margin-bottom:1rem; display:block; }
+    .engage-item h3 { color:#fff; font-size:1rem; font-weight:500; letter-spacing:.08em; text-transform:uppercase; margin-bottom:.7rem; }
+    .engage-item p { color:rgba(255,255,255,.5); font-size:.86rem; line-height:1.7; }
+    @media (max-width:880px) { .engage-grid { grid-template-columns:1fr; } .engage-item { border-right:none; border-bottom:1px solid rgba(255,255,255,.07); padding:1.8rem 1.4rem; text-align:left; display:flex; gap:1.2rem; align-items:flex-start; } .engage-item:last-child { border-bottom:none; } .engage-ico { margin-bottom:0; font-size:1.6rem; flex-shrink:0; margin-top:.1rem; } }
 
-    /* ── Mini cards ── */
-    .minis {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.1rem;
-      margin-top: 1.1rem;
-    }
-    .mini {
-      background: var(--white);
-      border: 1px solid var(--line);
-      border-radius: var(--r-md);
-      padding: 1.1rem 1.3rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      transition: transform .3s, box-shadow .3s;
-    }
-    .mini:hover { transform: translateY(-3px); box-shadow: 0 14px 36px rgba(22,20,18,.07); }
-    .mini-txt strong { display: block; font-weight: 500; font-size: .92rem; }
-    .mini-txt span   { font-size: .78rem; color: var(--muted); }
-    .mini-arrow {
-      width: 30px; height: 30px;
-      border-radius: 50%;
-      background: var(--beige);
-      display: flex; align-items: center; justify-content: center;
-      font-size: .8rem;
-      flex-shrink: 0;
-    }
-    @media (max-width: 880px) { .minis { grid-template-columns: 1fr; } }
-
-    /* ════════════════════════
-       SECTIONS
-    ════════════════════════ */
-    .section { padding: 5.5rem 0; }
-    .section-head { max-width: 560px; margin-bottom: 3rem; }
-    .eyebrow {
-      display: inline-block;
-      padding: .3rem 1rem;
-      border-radius: var(--r-pill);
-      background: var(--beige);
-      font-size: .72rem;
-      font-weight: 400;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 1.1rem;
-    }
-    .section-head .sub { margin-top: .8rem; }
-
-    /* ── Histoire ── */
-    .histoire-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3.5rem;
-      align-items: center;
-    }
-    .histoire-text p { color: var(--muted); font-size: .95rem; margin-top: 1.2rem; }
-    .tags { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: 1.8rem; }
-    .tag {
-      padding: .26rem 1rem;
-      border-radius: var(--r-pill);
-      background: var(--beige);
-      font-size: .74rem;
-      color: var(--muted);
-    }
-    .histoire-photo img {
-      width: 100%;
-      height: 470px;
-      object-fit: cover;
-      border-radius: var(--r-lg);
-    }
-    @media (max-width: 880px) {
-      .histoire-grid { grid-template-columns: 1fr; gap: 2.2rem; }
-      .histoire-photo img { height: 320px; }
-    }
-
-    /* ── Carte ── */
-    #carte { background: var(--white); border-radius: var(--r-lg); margin: 0 1rem; }
-    @media (min-width: 1200px) { #carte { margin: 0 auto; max-width: 1240px; } }
-
-    .tabs {
-      display: flex;
-      flex-wrap: nowrap;
-      gap: .5rem;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      margin-bottom: 2.4rem;
-      padding-bottom: .3rem;
-    }
-    .tabs::-webkit-scrollbar { display: none; }
-    .tab-btn {
-      background: var(--beige);
-      border: none;
-      border-radius: var(--r-pill);
-      padding: .55rem 1.4rem;
-      font-size: .82rem;
-      font-weight: 400;
-      color: var(--muted);
-      cursor: pointer;
-      white-space: nowrap;
-      transition: background .25s, color .25s;
-    }
-    .tab-btn.active { background: var(--ink); color: #fff; }
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
-
-    .menu-card {
-      background: var(--bg);
-      border-radius: var(--r-md);
-      padding: 1.9rem 2rem;
-      max-width: 620px;
-    }
-    .menu-card h3 { font-weight: 500; font-size: 1.15rem; margin-bottom: 1.1rem; }
-    .menu-list { list-style: none; }
-    .menu-list li {
-      display: flex;
-      align-items: center;
-      gap: .8rem;
-      padding: .62rem 0;
-      border-bottom: 1px solid var(--line);
-      font-size: .9rem;
-    }
-    .menu-list li:last-child { border: none; }
-    .menu-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--terra); flex-shrink: 0; }
-    .badge-gf {
-      display: inline-block;
-      margin-top: 1.1rem;
-      padding: .3rem 1rem;
-      border-radius: var(--r-pill);
-      background: var(--beige);
-      font-size: .74rem;
-      color: var(--muted);
-    }
-
-    /* ── Galerie ── */
-    .masonry { columns: 3; column-gap: 1rem; }
-    .masonry-item {
-      break-inside: avoid;
-      margin-bottom: 1rem;
-      position: relative;
-      overflow: hidden;
-      border-radius: var(--r-md);
-    }
-    .masonry-item img { width: 100%; transition: transform .5s ease; }
-    .masonry-item .overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,.45), transparent 55%);
-      opacity: 0;
-      transition: opacity .35s;
-      display: flex;
-      align-items: flex-end;
-      padding: 1rem;
-    }
-    .masonry-item .overlay span { color: #fff; font-size: .85rem; }
-    .masonry-item:hover img { transform: scale(1.04); }
-    .masonry-item:hover .overlay { opacity: 1; }
-    /* ── Galerie visual panels ── */
-    .gal-visual {
-      width: 100%; border-radius: var(--r-md);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: .8rem;
-    }
-    .gv-icon  { font-size: 2.8rem; line-height: 1; }
-    .gv-label { font-size: .7rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; opacity: .65; }
-    .gv-coffee    { background: linear-gradient(145deg,#FFF3E8 0%,#D4946A 100%); color: #6A2E08; }
-    .gv-floral    { background: linear-gradient(145deg,#F0F8EC 0%,#78B85C 100%); color: #1E5008; }
-    .gv-shake     { background: linear-gradient(145deg,#F0F4FF 0%,#8098E0 100%); color: #1A2A70; }
-    .gv-interieur { background: linear-gradient(145deg,#FFF0E8 0%,#C87848 100%); color: #602010; }
-    .gv-latte     { background: linear-gradient(145deg,#FFFCE8 0%,#DCC040 100%); color: #503808; }
-    .gv-table     { background: linear-gradient(145deg,#F8F0E8 0%,#B89860 100%); color: #482810; }
-    .gv-plantes   { background: linear-gradient(145deg,#EDFAE8 0%,#58A840 100%); color: #0E3808; }
-    .gv-cozy      { background: linear-gradient(145deg,#FEF6F0 0%,#E0846C 100%); color: #601810; }
-    @media (max-width: 880px) { .masonry { columns: 2; } }
-    @media (max-width: 500px) { .masonry { columns: 1; } }
-
-    /* ── Contact ── */
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1.15fr;
-      gap: 2.5rem;
-      align-items: start;
-    }
-    .contact-card {
-      background: var(--white);
-      border: 1px solid var(--line);
-      border-radius: var(--r-lg);
-      padding: 2rem;
-    }
-    .info-row {
-      display: flex;
-      gap: 1rem;
-      padding: .85rem 0;
-      border-bottom: 1px solid var(--line);
-      align-items: flex-start;
-    }
-    .info-row:last-of-type { border: none; }
-    .info-ico {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      background: var(--beige);
-      display: flex; align-items: center; justify-content: center;
-      font-size: .85rem;
-      flex-shrink: 0;
-    }
-    .info-body { font-size: .89rem; }
-    .info-lbl {
-      display: block;
-      font-size: .68rem;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-    .info-body a { color: var(--terra); }
-
-    .horaires { width: 100%; border-collapse: collapse; margin-top: .4rem; }
-    .horaires td { padding: .5rem 0; font-size: .87rem; border-bottom: 1px solid var(--line); }
-    .horaires td:first-child { color: var(--muted); padding-right: 1rem; }
-    .horaires tr:last-child td { border: none; }
-
-    .rating {
-      display: flex;
-      align-items: center;
-      gap: .8rem;
-      margin-top: 1.4rem;
-      padding: .9rem 1.2rem;
-      border-radius: var(--r-md);
-      background: var(--beige);
-    }
-    .stars { color: var(--terra); letter-spacing: .08rem; }
-    .rating p { font-size: .82rem; color: var(--muted); }
-
-    /* ── Newsletter card ── */
-    .newsletter-card {
-      background: var(--ink);
-      border-radius: var(--r-lg);
-      padding: 2.8rem 2.4rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 1.4rem;
-      min-height: 340px;
-    }
-    .newsletter-card .nl-eyebrow {
-      font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
-      color: var(--terra-soft); font-weight: 500;
-    }
-    .newsletter-card h3 { color: #fff; font-size: 1.5rem; font-weight: 400; line-height: 1.3; }
-    .newsletter-card p  { color: rgba(255,255,255,.55); font-size: .88rem; line-height: 1.65; }
-    .nl-form { display: flex; flex-direction: column; gap: .75rem; margin-top: .4rem; }
-    .nl-form input[type="email"] {
-      width: 100%; padding: .85rem 1.1rem;
-      background: rgba(255,255,255,.07);
-      border: 1px solid rgba(255,255,255,.15);
-      border-radius: var(--r-pill);
-      color: #fff; font-family: var(--ff); font-size: .9rem;
-      outline: none; transition: border-color .2s;
-    }
-    .nl-form input[type="email"]::placeholder { color: rgba(255,255,255,.35); }
-    .nl-form input[type="email"]:focus { border-color: var(--terra-soft); }
-    .nl-form input[type="text"] {
-      width: 100%; padding: .85rem 1.1rem;
-      background: rgba(255,255,255,.07);
-      border: 1px solid rgba(255,255,255,.15);
-      border-radius: var(--r-pill);
-      color: #fff; font-family: var(--ff); font-size: .9rem;
-      outline: none; transition: border-color .2s;
-    }
-    .nl-form input[type="text"]::placeholder { color: rgba(255,255,255,.35); }
-    .nl-form input[type="text"]:focus { border-color: var(--terra-soft); }
-    .nl-submit {
-      padding: .85rem 1.6rem;
-      background: var(--terra); color: #fff;
-      border: none; border-radius: var(--r-pill);
-      font-family: var(--ff); font-size: .88rem; font-weight: 500;
-      letter-spacing: .06em; cursor: pointer;
-      transition: background .25s, transform .15s;
-    }
-    .nl-submit:hover { background: #b5724d; transform: translateY(-1px); }
-    .nl-success {
-      display: none; padding: 1rem 1.2rem;
-      background: rgba(200,130,90,.15);
-      border: 1px solid var(--terra-soft);
-      border-radius: var(--r-md);
-      color: var(--terra-soft); font-size: .88rem; text-align: center;
-    }
-    .nl-error {
-      display: none; padding: .8rem 1rem;
-      background: rgba(220,80,80,.12);
-      border: 1px solid rgba(220,80,80,.4);
-      border-radius: var(--r-md);
-      color: #f08080; font-size: .84rem;
-    }
-    @media (max-width: 880px) {
-      .contact-grid { grid-template-columns: 1fr; }
-      .newsletter-card { padding: 2rem 1.6rem; min-height: auto; }
-    }
-
-    /* ════════════════════════
-       FOOTER
-    ════════════════════════ */
-    footer {
-      background: var(--ink);
-      color: rgba(255,255,255,.65);
-      border-radius: var(--r-lg) var(--r-lg) 0 0;
-      margin-top: 3rem;
-      padding: 3.5rem 1.4rem 2rem;
-    }
-    .footer-inner { max-width: 1140px; margin: 0 auto; }
-    .footer-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-      padding-bottom: 2rem;
-      border-bottom: 1px solid rgba(255,255,255,.1);
-    }
-    .footer-brand { display: flex; align-items: center; gap: .8rem; }
-    .footer-logo-img {
-      width: 52px; height: 52px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-    .footer-brand strong { color: #fff; font-weight: 500; font-size: 1.05rem; display: block; }
-    .footer-brand span   { font-size: .8rem; }
-    .footer-links { display: flex; flex-wrap: wrap; gap: 1.4rem; }
-    .footer-links a { font-size: .82rem; transition: color .25s; }
-    .footer-links a:hover { color: #fff; }
-    .footer-bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      flex-wrap: wrap;
-      padding-top: 1.6rem;
-      font-size: .76rem;
-      color: rgba(255,255,255,.4);
-    }
-    .footer-socials { display: flex; gap: .6rem; }
-    .s-btn {
-      width: 36px; height: 36px;
-      border: 1px solid rgba(255,255,255,.16);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      color: rgba(255,255,255,.6);
-      transition: border-color .25s, color .25s;
-    }
-    .s-btn:hover { border-color: #fff; color: #fff; }
-
-    /* ── Carte split ── */
-    .carte-split {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.8rem;
-      align-items: start;
-    }
-    .carte-img img {
-      width: 100%;
-      height: 360px;
-      object-fit: cover;
-      border-radius: var(--r-md);
-    }
-    .carte-visual {
-      width: 100%;
-      height: 360px;
-      border-radius: var(--r-md);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: .9rem;
-    }
-    .cv-icon { font-size: 3.8rem; line-height: 1; }
-    .cv-label { font-size: .72rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; opacity: .65; }
-    .cv-chaudes { background: linear-gradient(145deg,#FFF3E8 0%,#E8A870 100%); color: #7A3810; }
-    .cv-froides { background: linear-gradient(145deg,#E4F4F8 0%,#78BED0 100%); color: #185468; }
-    .cv-bar     { background: linear-gradient(145deg,#F8F0E4 0%,#C08040 100%); color: #502A08; }
-    .cv-crepes  { background: linear-gradient(145deg,#FFFCE4 0%,#E8C040 100%); color: #503E08; }
-    .cv-brunch  { background: linear-gradient(145deg,#EEF6EA 0%,#80B868 100%); color: #1A4808; }
-    @media (max-width: 880px) {
-      .carte-split { grid-template-columns: 1fr; }
-      .carte-img img { height: 220px; }
-      .carte-visual { height: 200px; }
-      .cv-icon { font-size: 2.8rem; }
-    }
-
-    /* ════════════════════════
-       ANIMATIONS
-    ════════════════════════ */
-
-    /* ── Keyframes ── */
-    @keyframes fadeUp   { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
-    @keyframes fadeIn   { from { opacity:0; } to { opacity:1; } }
-    @keyframes scaleIn  { from { opacity:0; transform:scale(.9); } to { opacity:1; transform:scale(1); } }
-    @keyframes slideDown{ from { opacity:0; transform:translateY(-16px); } to { opacity:1; transform:translateY(0); } }
-    @keyframes floatY   { 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-7px); } }
-    @keyframes shimmer  {
-      0%   { background-position: -400px 0; }
-      100% { background-position:  400px 0; }
-    }
-
-    /* ── Entrée nav ── */
-    #nav { animation: slideDown .55s cubic-bezier(.2,.8,.2,1) both; }
-
-    /* ── Entrée hero ── */
-    .hero-copy h1        { animation: fadeUp .8s cubic-bezier(.2,.8,.2,1) .15s both; }
-    .hero-copy .sub      { animation: fadeUp .7s ease .35s both; }
-    .hero-actions        { animation: fadeUp .7s ease .5s both; }
-    .hero-perks          { animation: fadeIn .9s ease .6s both; }
-
-    /* ── Bento cards ── */
-    .bento-card { animation: scaleIn .7s cubic-bezier(.2,.8,.2,1) both; }
-    .bento > .bento-card:nth-child(1) { animation-delay: .2s; }
-    .bento > .bento-card:nth-child(2) { animation-delay: .35s; }
-    .bento > .bento-card:nth-child(3) { animation-delay: .5s; }
-    .bento > .bento-card:nth-child(4) { animation-delay: .65s; }
-
-    /* ── Scroll reveal ── */
-    .reveal { opacity: 1; transform: none; transition: opacity .75s ease, transform .75s ease; }
-    .reveal.will-animate { opacity: 0; transform: translateY(22px); }
-    .reveal.in { opacity: 1 !important; transform: none !important; }
-
-    /* ── Tab panel transition ── */
-    .tab-panel { animation: none; }
-    .tab-panel.active { animation: fadeIn .35s ease both; }
-
-    /* ── Gallery hover (zoom already defined above) ── */
-    .masonry-item { transition: transform .3s ease, box-shadow .3s ease; }
-    .masonry-item:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,.14); }
-
-    /* ── Bento logo float ── */
-    .bento-logo { animation: floatY 3.6s ease-in-out infinite; }
-
-    /* ── Mini cards hover ── */
-    .mini { transition: transform .3s ease, box-shadow .3s ease; }
-    .mini:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(22,20,18,.09); }
-
-    /* ── Boutons micro-interaction ── */
-    .btn { transition: opacity .22s, background .22s, color .22s, transform .18s; }
-    .btn:active { transform: scale(.96); }
-
-    /* ── Tab button hover ── */
-    .tab-btn { transition: background .2s, color .2s, transform .15s; }
-    .tab-btn:not(.active):hover { background: var(--sand); color: var(--ink); transform: translateY(-1px); }
-
-    /* ── Info rows stagger ── */
-    .info-row { transition: background .2s; }
-    .info-row:hover { background: var(--beige); border-radius: var(--r-md); }
-
-    /* ── S-btn (social) ── */
-    .s-btn { transition: border-color .25s, color .25s, transform .2s; }
-    .s-btn:hover { transform: translateY(-2px); }
-
-    /* ── Footer links ── */
-    .footer-links a { transition: color .25s, transform .2s; display: inline-block; }
-    .footer-links a:hover { transform: translateX(3px); }
-
-    /* ── Nav links underline ── */
-    .nav-links a { position: relative; }
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: -2px; left: 0;
-      width: 0; height: 1px;
-      background: var(--terra);
-      transition: width .25s ease;
-    }
-    .nav-links a:hover::after { width: 100%; }
-
-    /* ── Eyebrow badge ── */
-    .eyebrow { transition: background .2s, color .2s; }
-    .eyebrow:hover { background: var(--terra-soft); color: var(--ink); }
-
-    /* ── Tags hover ── */
-    .tag { transition: background .2s, transform .2s; cursor: default; }
-    .tag:hover { background: var(--terra-soft); transform: scale(1.04); }
-
+    /* FOOTER HOURS */
+    .footer-hours { display:flex; gap:1.8rem; flex-wrap:wrap; margin-top:.8rem; }
+    .footer-hours span { font-size:.78rem; color:rgba(255,255,255,.4); }
+    .footer-hours strong { color:rgba(255,255,255,.7); font-weight:400; }
   </style>
 </head>
 <body>
 
-<!-- ─────────────────── NAV ─────────────────── -->
-<nav id="nav">
-  <div class="nav-inner">
-    <a href="#" class="nav-brand">
-      <img src="https://i.ibb.co/album/pastelcafe-logo-crop.jpg" alt="Logo Pastel Café" class="nav-logo-img" onerror="this.style.display='none'">
-      <span>Pastel Café</span>
-    </a>
-    <ul class="nav-links">
-      <li><a href="#histoire">Notre histoire</a></li>
-      <li><a href="#carte">La carte</a></li>
-      <li><a href="#galerie">Galerie</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    <a href="#contact" class="btn btn--dark nav-cta">Réserver</a>
-    <button class="burger" id="burgerBtn" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</nav>
-
-<!-- Mobile nav -->
-<div class="mobile-nav" id="mobileNav">
-  <a href="#histoire" class="mobile-link">— Notre histoire</a>
-  <a href="#carte" class="mobile-link">— La carte</a>
-  <a href="#galerie" class="mobile-link">— Galerie</a>
-  <a href="#contact" class="mobile-link">— Contact</a>
-  <a href="#contact" class="btn btn--dark">Réserver une table</a>
-</div>
-
-<!-- ─────────────────── HERO ─────────────────── -->
-<section id="hero">
-  <div class="container">
-    <div class="hero-grid">
-      <div class="hero-copy">
-        <h1 class="h-xl">Un écrin floral<br>au cœur de<br>Compiègne.</h1>
-        <p class="sub">Café, bar et crêperie à deux pas du palais.  On vous attend au <strong>3 bis rue Napoléon</strong>.</p>
-        <div class="hero-actions">
-          <a href="#carte" class="btn btn--dark">Découvrir la carte →</a>
-          <a href="#histoire" class="btn btn--light">Notre histoire</a>
-        </div>
-      </div>
-      <ul class="hero-perks">
-        <li><span class="perk-ico">☕</span> Café de spécialité</li>
-        <li><span class="perk-ico">🌿</span> Décor floral unique</li>
-        <li><span class="perk-ico">🥞</span> Crêpes & brunch</li>
-        <li><span class="perk-ico">🍸</span> Cocktails & mocktails</li>
+  <nav id="nav">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-brand">
+        <img class="nav-logo-img" src="logo.jpg" alt="Pastel Café">
+        <span>Pastel Café</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#histoire">Notre histoire</a></li>
+        <li><a href="#carte">La carte</a></li>
+        <li><a href="#galerie">Galerie</a></li>
+        <li><a href="#contact">Contact</a></li>
       </ul>
+      <a href="https://www.google.com/maps/place/Pastel+Caf%C3%A9/@49.4171178,2.8255375,20z/data=!4m6!3m5!1s0x47e7d79e4e5efdc7:0xb8abd7ce74dc7eff!8m2!3d49.4172156!4d2.8256724!16s%2Fg%2F11vygn4849?entry=ttu&g_ep=EgoyMDI2MDYwMy4xIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener" class="btn btn--dark nav-cta">Nous trouver</a>
+      <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
+  </nav>
 
-    <!-- Bento -->
-    <div class="bento">
-      <!-- Grande photo principale -->
-      <div class="bento-card bento-card--photo">
-        <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=900&q=80" alt="Pastel Café intérieur" loading="lazy">
-        <h3>L'ambiance Pastel</h3>
-        <p>Un lieu chaleureux où chaque détail compte.</p>
-        <a href="#galerie" class="btn btn--light">Voir la galerie →</a>
-      </div>
-
-      <!-- Carte terra -->
-      <div class="bento-card bento-card--terra">
-        <div>
-          <img src="https://i.ibb.co/album/pastelcafe-logo-crop.jpg" alt="Logo" class="bento-logo" onerror="this.style.display='none'">
-          <h3>La carte du moment</h3>
-          <p class="price">dès 4 €</p>
-          <p>Crêpes, boissons chaudes, milkshakes&nbsp;— tout est fait avec soin.</p>
-        </div>
-        <a href="#carte" class="btn btn--light">Explorer la carte →</a>
-      </div>
-    </div>
-
-    <!-- Mini cards -->
-    <div class="minis">
-      <a href="#contact" class="mini">
-        <div class="mini-txt">
-          <strong>3 bis rue Napoléon</strong>
-          <span>60200 Compiègne</span>
-        </div>
-        <span class="mini-arrow">📍</span>
-      </a>
-      <a href="#contact" class="mini">
-        <div class="mini-txt">
-          <strong>Mar – Dim : 9h – 19h</strong>
-          <span>Lundi fermé</span>
-        </div>
-        <span class="mini-arrow">⏰</span>
-      </a>
-      <a href="tel:+33344000000" class="mini">
-        <div class="mini-txt">
-          <strong>03 44 00 00 00</strong>
-          <span>Réservations</span>
-        </div>
-        <span class="mini-arrow">📞</span>
-      </a>
-    </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#histoire" class="mob-link">Notre histoire</a>
+    <a href="#carte" class="mob-link">La carte</a>
+    <a href="#galerie" class="mob-link">Galerie</a>
+    <a href="#contact" class="mob-link">Contact</a>
   </div>
-</section>
 
-<!-- ─────────────────── HISTOIRE ─────────────────── -->
-<section id="histoire" class="section">
-  <div class="container">
-    <div class="histoire-grid">
-      <div class="histoire-text">
-        <div class="section-head reveal">
-          <span class="eyebrow">Notre histoire</span>
-          <h2 class="h-lg">Un endroit pensé pour vous faire du bien.</h2>
-          <p class="sub">Depuis notre ouverture, Pastel Café est devenu le repaire des amoureux du café, des crêpes maison et des instants de douceur.</p>
-        </div>
-        <p class="reveal d1">Nous avons imaginé Pastel Café comme un endroit où l'on vient se ressourcer, travailler depuis un coin cosy ou partager un moment avec des amis. Notre carte évolue au fil des saisons.</p>
-        <p class="reveal d2" style="margin-top:.9rem;">Chaque boisson est préparée avec soin, chaque crêpe est cuite à la commande. Notre équipe est là pour vous accueillir avec le sourire, tous les jours de la semaine (sauf le lundi).</p>
-        <div class="tags reveal d3">
-          <span class="tag">☕ Café de spécialité</span>
-          <span class="tag">🌿 Décor floral</span>
-          <span class="tag">🥞 Crêpes maison</span>
-          <span class="tag">🍸 Bar à cocktails</span>
-          <span class="tag">☀️ Terrasse</span>
-          <span class="tag">📚 Espace co-working</span>
-        </div>
-      </div>
-      <div class="histoire-photo reveal d2">
-        <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&q=80" alt="Intérieur Pastel Café" loading="lazy">
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ─────────────────── CARTE ─────────────────── -->
-<section id="carte" class="section">
-  <div class="container">
-    <div class="section-head reveal">
-      <span class="eyebrow">La carte</span>
-      <h2 class="h-lg">Des saveurs pensées pour vous.</h2>
-      <p class="sub">Crêpes, boissons chaudes ou froides, viennoiseries, milkshakes et cocktails. Il y a toujours quelque chose pour vous.</p>
-    </div>
-
-    <div class="tabs reveal">
-      <button class="tab-btn active" data-tab="boissons-chaudes">Boissons chaudes</button>
-      <button class="tab-btn" data-tab="boissons-froides">Boissons froides</button>
-      <button class="tab-btn" data-tab="bar">Bar</button>
-      <button class="tab-btn" data-tab="crepes">Crêpes</button>
-      <button class="tab-btn" data-tab="brunch">Brunch</button>
-    </div>
-
-    <!-- Boissons chaudes -->
-    <div class="tab-panel active" id="tab-boissons-chaudes">
-      <div class="carte-split">
-        <div class="menu-card">
-          <h3>Boissons chaudes</h3>
-          <ul class="menu-list">
-            <li><span class="menu-dot"></span>Expresso</li>
-            <li><span class="menu-dot"></span>Double expresso</li>
-            <li><span class="menu-dot"></span>Café long</li>
-            <li><span class="menu-dot"></span>Cappuccino</li>
-            <li><span class="menu-dot"></span>Latte</li>
-            <li><span class="menu-dot"></span>Flat white</li>
-            <li><span class="menu-dot"></span>Thé (Darjeeling, Menthe, Chamomille)</li>
-            <li><span class="menu-dot"></span>Chocolat chaud</li>
-          </ul>
-          <span class="badge-gf">♥ Laits végétaux disponibles (avoine, soja, amande)</span>
-        </div>
-        <div class="carte-visual cv-chaudes">
-          <span class="cv-icon">☕</span>
-          <span class="cv-label">Boissons chaudes</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Boissons froides -->
-    <div class="tab-panel" id="tab-boissons-froides">
-      <div class="carte-split">
-        <div class="menu-card">
-          <h3>Boissons froides</h3>
-          <ul class="menu-list">
-            <li><span class="menu-dot"></span>Lemonade maison</li>
-            <li><span class="menu-dot"></span>Iced latte</li>
-            <li><span class="menu-dot"></span>Iced matcha</li>
-            <li><span class="menu-dot"></span>Milkshake vanille</li>
-            <li><span class="menu-dot"></span>Milkshake fraise</li>
-            <li><span class="menu-dot"></span>Milkshake chocolat</li>
-            <li><span class="menu-dot"></span>Smoothie tropical</li>
-            <li><span class="menu-dot"></span>Eau de coco</li>
-          </ul>
-        </div>
-        <div class="carte-visual cv-froides">
-          <span class="cv-icon">🥤</span>
-          <span class="cv-label">Boissons froides</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Bar -->
-    <div class="tab-panel" id="tab-bar">
-      <div class="carte-split">
-        <div class="menu-card">
-          <h3>Bar</h3>
-          <ul class="menu-list">
-            <li><span class="menu-dot"></span>Bières pression (blonde, ambrée)</li>
-            <li><span class="menu-dot"></span>Vins au verre (rouge, blanc, rosé)</li>
-            <li><span class="menu-dot"></span>Cocktails classiques (Mojito, Spritz, Negroni…)</li>
-            <li><span class="menu-dot"></span>Mocktails maison</li>
-            <li><span class="menu-dot"></span>Softs & jus</li>
-          </ul>
-          <span class="badge-gf">🍸 Cocktails signature à découvrir sur place</span>
-        </div>
-        <div class="carte-visual cv-bar">
-          <span class="cv-icon">🍹</span>
-          <span class="cv-label">Bar</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Crêpes -->
-    <div class="tab-panel" id="tab-crepes">
-      <div class="carte-split">
-        <div class="menu-card">
-          <h3>Crêpes</h3>
-          <ul class="menu-list">
-            <li><span class="menu-dot"></span>Beurre sucre</li>
-            <li><span class="menu-dot"></span>Confiture fraise / framboise</li>
-            <li><span class="menu-dot"></span>Nutella</li>
-            <li><span class="menu-dot"></span>Chantilly fraise</li>
-            <li><span class="menu-dot"></span>Caramel beurre salé</li>
-            <li><span class="menu-dot"></span>Banane chocolat</li>
-            <li><span class="menu-dot"></span>Crêpe complète (jambon, fromage, œuf)</li>
-          </ul>
-          <span class="badge-gf">✓ Disponibles en galette de sarrasin (sans gluten)</span>
-        </div>
-        <div class="carte-visual cv-crepes">
-          <span class="cv-icon">🥞</span>
-          <span class="cv-label">Crêpes</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Brunch -->
-    <div class="tab-panel" id="tab-brunch">
-      <div class="carte-split">
-        <div class="menu-card">
-          <h3>Brunch (week-end)</h3>
-          <ul class="menu-list">
-            <li><span class="menu-dot"></span>Formule Petit-déj classic</li>
-            <li><span class="menu-dot"></span>Formule Brunch complet</li>
-            <li><span class="menu-dot"></span>Pancakes maison</li>
-            <li><span class="menu-dot"></span>Avocado toast</li>
-            <li><span class="menu-dot"></span>Bowl granola & fruits</li>
-            <li><span class="menu-dot"></span>Eggs Benedict</li>
-          </ul>
-          <span class="badge-gf">🍞 Disponible samedi & dimanche – 9h à 14h</span>
-        </div>
-        <div class="carte-visual cv-brunch">
-          <span class="cv-icon">🥘</span>
-          <span class="cv-label">Brunch</span>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ─────────────────── GALERIE ─────────────────── -->
-<section id="galerie" class="section">
-  <div class="container">
-    <div class="section-head reveal">
-      <span class="eyebrow">Galerie</span>
-      <h2 class="h-lg">Quelques instants chez nous.</h2>
-      <p class="sub">Du matin au soir, Pastel Café se prête à tous les moments de la journée.</p>
-    </div>
-
-    <div class="masonry">
-
-      <div class="masonry-item">
-        <div class="gal-visual gv-coffee" style="height:240px;">
-          <span class="gv-icon">☕</span>
-          <span class="gv-label">Café</span>
-        </div>
-        <div class="overlay"><span>Café du matin</span></div>
-      </div>
-
-      <div class="masonry-item">
-        <div class="gal-visual gv-floral" style="height:320px;">
-          <span class="gv-icon">🌸</span>
-          <span class="gv-label">Décor floral</span>
-        </div>
-        <div class="overlay"><span>Décor floral</span></div>
-      </div>
-
-      <div class="masonry-item">
-        <div class="gal-visual gv-shake" style="height:200px;">
-          <span class="gv-icon">🥤</span>
-          <span class="gv-label">Milkshake</span>
-        </div>
-        <div class="overlay"><span>Milkshake maison</span></div>
-      </div>
-
-      <div class="masonry-item">
-        <div class="gal-visual gv-interieur" style="height:280px;">
-          <span class="gv-icon">🏡</span>
-          <span class="gv-label">Intérieur</span>
-        </div>
-        <div class="overlay"><span>Intérieur chaleureux</span></div>
-      </div>
-
-      <div class="masonry-item">
-        <div class="gal-visual gv-latte" style="height:220px;">
-          <span class="gv-icon">🌞</span>
-          <span class="gv-label">Latte art</span>
-        </div>
-        <div class="overlay"><span>Latte art</span></div>
-      </div>
-
-      <div class="masonry-item">
-        <div class="gal-visual gv-table" style="height:260px;">
-          <span class="gv-icon">🍽️</span>
-          <span class="gv-label">Table dressée</span>
-        </div>
-        <div class="overlay"><span>Table dressée</span></div>
-      </div>
-
-      <div class="masonry-item">
-        <div class="gal-visual gv-plantes" style="height:300px;">
-          <span class="gv-icon">🌿</span>
-          <span class="gv-label">Plantes</span>
-        </div>
-        <div class="overlay"><span>Ambiance verte</span></div>
-      </div>
-
-      <div class="masonry-item">
-        <div class="gal-visual gv-cozy" style="height:240px;">
-          <span class="gv-icon">✨</span>
-          <span class="gv-label">Cozy corner</span>
-        </div>
-        <div class="overlay"><span>Coin cozy</span></div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ─────────────────── CONTACT ─────────────────── -->
-<section id="contact" class="section">
-  <div class="container">
-    <div class="section-head reveal">
-      <span class="eyebrow">Nous trouver</span>
-      <h2 class="h-lg">On vous attend avec plaisir.</h2>
-      <p class="sub">Réservations, questions, suggestions : on est là.</p>
-    </div>
-
-    <div class="contact-grid">
-      <!-- Infos -->
-      <div class="contact-card reveal">
-        <div class="info-row">
-          <span class="info-ico">📍</span>
-          <div class="info-body">
-            <span class="info-lbl">Adresse</span>
-            3 bis rue Napoléon<br>60200 Compiègne
+  <section id="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <h1 class="h-xl">Un écrin floral<br>au cœur de Compiègne</h1>
+          <p class="sub">Café, bar et crêperie — savourez, respirez et profitez de chaque instant.</p>
+          <div class="hero-actions">
+            <a href="#carte" class="btn btn--dark">Découvrir la carte</a>
+            <a href="https://www.google.com/maps/place/Pastel+Caf%C3%A9/@49.4171178,2.8255375,20z/data=!4m6!3m5!1s0x47e7d79e4e5efdc7:0xb8abd7ce74dc7eff!8m2!3d49.4172156!4d2.8256724!16s%2Fg%2F11vygn4849?entry=ttu&g_ep=EgoyMDI2MDYwMy4xIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener" class="btn btn--light">Nous trouver</a>
           </div>
         </div>
-        <div class="info-row">
-          <span class="info-ico">⏰</span>
-          <div class="info-body">
-            <span class="info-lbl">Horaires</span>
-            <table class="horaires">
-              <tr><td>Lundi</td><td>Fermé</td></tr>
-              <tr><td>Mardi – Vendredi</td><td>9h – 19h</td></tr>
-              <tr><td>Samedi</td><td>9h – 20h</td></tr>
-              <tr><td>Dimanche</td><td>9h – 18h</td></tr>
-            </table>
+        <ul class="hero-perks">
+          <li><span class="perk-ico">☕</span>Café artisanal &amp; crêpes maison</li>
+          <li><span class="perk-ico">🌿</span>Option sans gluten disponible</li>
+          <li><span class="perk-ico">🎶</span>Soirées événements jusqu'à 22h</li>
+          <li><span class="perk-ico">★</span>100 % recommandé sur Facebook</li>
+        </ul>
+      </div>
+      <div class="ticker-wrap">
+        <div class="ticker-belt">
+          <div class="ticker-track">
+            <span>Café artisanal</span><span class="ticker-dot">·</span>
+            <span>Crêpes maison</span><span class="ticker-dot">·</span>
+            <span>Bar à cocktails</span><span class="ticker-dot">·</span>
+            <span>Brunch &amp; Planches</span><span class="ticker-dot">·</span>
+            <span>Option sans gluten</span><span class="ticker-dot">·</span>
+            <span>Soirées événements</span><span class="ticker-dot">·</span>
+            <span>Compiègne</span><span class="ticker-dot">·</span>
+          </div>
+          <div class="ticker-track" aria-hidden="true">
+            <span>Café artisanal</span><span class="ticker-dot">·</span>
+            <span>Crêpes maison</span><span class="ticker-dot">·</span>
+            <span>Bar à cocktails</span><span class="ticker-dot">·</span>
+            <span>Brunch &amp; Planches</span><span class="ticker-dot">·</span>
+            <span>Option sans gluten</span><span class="ticker-dot">·</span>
+            <span>Soirées événements</span><span class="ticker-dot">·</span>
+            <span>Compiègne</span><span class="ticker-dot">·</span>
           </div>
         </div>
-        <div class="info-row">
-          <span class="info-ico">📞</span>
-          <div class="info-body">
-            <span class="info-lbl">Téléphone</span>
-            <a href="tel:+33344000000">03 44 00 00 00</a>
-          </div>
+      </div>
+      <div class="bento" style="margin-top:1.1rem;">
+        <div class="bento-card bento-card--photo">
+          <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=900&q=80&fit=crop" alt="Intérieur chaleureux du Pastel Café" loading="lazy">
+          <h3>Une ambiance botanique &amp; chaleureuse</h3>
+          <p>Plantes tropicales, fauteuils en rotin et lumière dorée</p>
+          <div><a href="#histoire" class="btn btn--light">Notre histoire</a></div>
         </div>
-        <div class="info-row">
-          <span class="info-ico">📧</span>
-          <div class="info-body">
-            <span class="info-lbl">Email</span>
-            <a href="mailto:contact@pastelcafe.fr">contact@pastelcafe.fr</a>
-          </div>
-        </div>
-        <div class="rating">
-          <span class="stars">★★★★★</span>
+        <div class="bento-card bento-card--terra">
+          <img class="bento-logo" src="logo.jpg" alt="Logo Pastel Café">
           <div>
-            <strong>4.8 / 5</strong>
-            <p>Basé sur 120+ avis Google</p>
+            <h3>Offre du Jour</h3>
+            <div class="price">5,50 €</div>
+            <p>Espresso + dessert vitrine · Mardi au vendredi, 9h – 19h</p>
+            <a href="#carte" class="btn btn--light">Voir la carte</a>
           </div>
         </div>
       </div>
-
-      <!-- Newsletter -->
-      <div class="newsletter-card reveal d1">
-        <span class="nl-eyebrow">✉️ Newsletter</span>
-        <h3>Les nouveautés du Pastel Café directement dans votre boîte.</h3>
-        <p>Carte du moment, événements, offres réservées aux abonnés : on vous dit tout en premier.</p>
-        <form class="nl-form" id="nlForm">
-          <input type="text" name="nom" placeholder="Votre prénom" autocomplete="given-name" required>
-          <input type="email" name="email" placeholder="Votre adresse e-mail" autocomplete="email" required>
-          <button type="submit" class="nl-submit">S'abonner →</button>
-          <div class="nl-error" id="nlError"></div>
-        </form>
-        <div class="nl-success" id="nlSuccess">🌸 Merci ! Vous êtes bien inscrit(e). à très vite !</div>
+      <div class="minis">
+        <a href="#carte" class="mini">
+          <div class="mini-txt"><strong>Sachet-Cadeau · 15 €</strong><span>20 sachets de thé + infuseur artisanal</span></div>
+          <span class="mini-arrow">→</span>
+        </a>
+        <a href="#contact" class="mini">
+          <div class="mini-txt"><strong>Soirées événements</strong><span>Privatisation &amp; Fête de la Musique</span></div>
+          <span class="mini-arrow">→</span>
+        </a>
+        <a href="#carte" class="mini">
+          <div class="mini-txt"><strong>Brunch &amp; Planches</strong><span>Petits-déjeuners complets &amp; charcuterie</span></div>
+          <span class="mini-arrow">→</span>
+        </a>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ─────────────────── FOOTER ─────────────────── -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <img src="https://i.ibb.co/album/pastelcafe-logo-crop.jpg" alt="Logo" class="footer-logo-img" onerror="this.style.display='none'">
-        <div>
-          <strong>Pastel Café</strong>
-          <span>Café · Bar · Crêperie · Compiègne</span>
+  <section id="histoire" class="section">
+    <div class="container">
+      <div class="histoire-grid">
+        <div class="histoire-text">
+          <span class="eyebrow">01 · Qui sommes-nous</span>
+          <h2 class="h-lg">Notre histoire</h2>
+          <p>Tout a commencé avec une idée simple : créer un endroit où chaque détail invite à ralentir. Un lieu pensé comme un refuge de douceur, loin de l'agitation de la ville, où le temps s'étire au rythme d'un café fumant et d'une conversation.</p>
+          <p>Niché au cœur de Compiègne, le Pastel Café est né d'une passion pour les lieux chaleureux et les instants suspendus. Notre équipe jeune et dynamique a imaginé un espace où l'on se sent immédiatement chez soi.</p>
+          <p>Des plantes tropicales cascadant depuis les étagères, un papier peint fleuri qui enveloppe la salle, des fauteuils en rotin, des tables en bois clair et la lumière dorée du soir — chaque détail a été pensé pour vous.</p>
+          <p>Entre café parisien chic et salon de thé botanique, nous vous proposons bien plus qu'une boisson : une expérience sensorielle, artisanale et conviviale.</p>
+          <p>Aujourd'hui, le Pastel Café accueille ses habitués comme des amis. Étudiants, familles, voyageurs de passage ou Compiégnois de longue date — tout le monde trouve sa place dans notre écrin fleuri. Venez comme vous êtes.</p>
+          <blockquote class="pull-quote">
+            <p>Un café comme on en rêve — chaleureux, fleuri, et sincèrement le vôtre.</p>
+            <cite class="pq-author">— L'équipe Pastel Café</cite>
+          </blockquote>
+          <div class="tags">
+            <span class="tag">Cozy</span><span class="tag">Floral</span><span class="tag">Botanique</span>
+            <span class="tag">Artisanal</span><span class="tag">Chaleureux</span><span class="tag">Gourmand</span>
+          </div>
+        </div>
+        <div class="histoire-photo">
+          <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&q=80&fit=crop" alt="Ambiance du Pastel Café" loading="lazy">
         </div>
       </div>
-      <nav class="footer-links">
-        <a href="#histoire">Notre histoire</a>
-        <a href="#carte">La carte</a>
-        <a href="#galerie">Galerie</a>
-        <a href="#contact">Contact</a>
-        <a href="#">Mentions légales</a>
-      </nav>
     </div>
-    <div class="footer-bottom">
-      <span>© 2025 Pastel Café — 3 bis rue Napoléon, 60200 Compiègne</span>
-      <div class="footer-socials">
-        <a href="#" class="s-btn" aria-label="Instagram">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="2" width="20" height="20" rx="5"/>
-            <circle cx="12" cy="12" r="5"/>
-            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
-          </svg>
-        </a>
-        <a href="#" class="s-btn" aria-label="Facebook">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-          </svg>
-        </a>
+  </section>
+
+  <section class="engagements">
+    <div class="container">
+      <div class="engage-grid">
+        <div class="engage-item anim">
+          <span class="engage-ico">☕</span>
+          <h3>Artisanal</h3>
+          <p>Chaque préparation est faite maison, avec des ingrédients soigneusement choisis pour vous offrir le meilleur.</p>
+        </div>
+        <div class="engage-item anim">
+          <span class="engage-ico">📍</span>
+          <h3>Local</h3>
+          <p>Ancrés au cœur de Compiègne depuis 2023, nous faisons partie du quartier et de ses habitants.</p>
+        </div>
+        <div class="engage-item anim">
+          <span class="engage-ico">🌸</span>
+          <h3>Floral</h3>
+          <p>Un décor botanique pensé comme un écrin : plantes tropicales, fleurs et lumière dorée à chaque coin.</p>
+        </div>
       </div>
     </div>
-  </div>
-</footer>
+  </section>
 
-<script>
-  /* ─────────────────── BURGER ─────────────────── */
-  const burger    = document.getElementById('burgerBtn');
-  const mobileNav = document.getElementById('mobileNav');
-  burger.addEventListener('click', () => {
-    burger.classList.toggle('open');
-    mobileNav.classList.toggle('open');
-    document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
-  });
-  document.querySelectorAll('.mobile-link').forEach(l => {
-    l.addEventListener('click', () => {
-      burger.classList.remove('open');
+  <section id="carte" class="section">
+    <div class="container">
+      <div class="section-head anim">
+        <span class="eyebrow">02 · La carte</span>
+        <h2 class="h-lg">Ce que nous vous proposons</h2>
+        <p class="sub">Boissons artisanales, crêpes maison et planches à partager.</p>
+      </div>
+      <div class="tabs" role="tablist">
+        <button class="tab-btn active" data-tab="chaudes" role="tab">Boissons chaudes</button>
+        <button class="tab-btn" data-tab="froides" role="tab">Boissons froides</button>
+        <button class="tab-btn" data-tab="bar" role="tab">Bar</button>
+        <button class="tab-btn" data-tab="crepes" role="tab">Crêperie</button>
+        <button class="tab-btn" data-tab="brunch" role="tab">Brunch &amp; Planches</button>
+      </div>
+      <div class="tab-panel active" id="tp-chaudes">
+        <div class="carte-split">
+          <div class="carte-visual cv-chaudes" role="img" aria-label="Boissons chaudes"><span class="cv-icon">☕</span><span class="cv-label">Boissons chaudes</span></div>
+          <div class="menu-card">
+            <h3>Boissons chaudes</h3>
+            <ul class="menu-list">
+              <li><span class="menu-dot"></span>Espresso</li>
+              <li><span class="menu-dot"></span>Cappuccino</li>
+              <li><span class="menu-dot"></span>Latte</li>
+              <li><span class="menu-dot"></span>Chocolat Viennois</li>
+              <li><span class="menu-dot"></span>Sélection de thés — sachet-cadeau 15 €</li>
+              <li><span class="menu-dot"></span>Baileys Coffee</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="tab-panel" id="tp-froides">
+        <div class="carte-split">
+          <div class="carte-visual cv-froides" role="img" aria-label="Boissons froides"><span class="cv-icon">🥤</span><span class="cv-label">Boissons froides</span></div>
+          <div class="menu-card">
+            <h3>Boissons froides</h3>
+            <ul class="menu-list">
+              <li><span class="menu-dot"></span>Cocktails sans alcool</li>
+              <li><span class="menu-dot"></span>Mocktails fruités maison</li>
+              <li><span class="menu-dot"></span>Milkshakes</li>
+              <li><span class="menu-dot"></span>Smoothies</li>
+              <li><span class="menu-dot"></span>Limonades artisanales</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="tab-panel" id="tp-bar">
+        <div class="carte-split">
+          <div class="carte-visual cv-bar" role="img" aria-label="Bar cocktails"><span class="cv-icon">🍸</span><span class="cv-label">Bar</span></div>
+          <div class="menu-card">
+            <h3>Bar</h3>
+            <ul class="menu-list">
+              <li><span class="menu-dot"></span>Bières — Leffe et sélection pression</li>
+              <li><span class="menu-dot"></span>Vins sélectionnés</li>
+              <li><span class="menu-dot"></span>Cocktails maison</li>
+              <li><span class="menu-dot"></span>À emporter ou sur place</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="tab-panel" id="tp-crepes">
+        <div class="carte-split">
+          <div class="carte-visual cv-crepes" role="img" aria-label="Crêperie"><span class="cv-icon">🥞</span><span class="cv-label">Crêperie</span></div>
+          <div class="menu-card">
+            <h3>Crêperie</h3>
+            <ul class="menu-list">
+              <li><span class="menu-dot"></span>Crêpes dessert maison</li>
+              <li><span class="menu-dot"></span>Garnitures variées au choix</li>
+              <li><span class="menu-dot"></span>Option Sarrasin sans gluten (sur demande)</li>
+            </ul>
+            <span class="badge-gf">🌿 Option sans gluten disponible</span>
+          </div>
+        </div>
+      </div>
+      <div class="tab-panel" id="tp-brunch">
+        <div class="carte-split">
+          <div class="carte-visual cv-brunch" role="img" aria-label="Brunch et planches"><span class="cv-icon">🥗</span><span class="cv-label">Brunch &amp; Planches</span></div>
+          <div class="menu-card">
+            <h3>Brunch &amp; Planches</h3>
+            <ul class="menu-list">
+              <li><span class="menu-dot"></span>Petits-déjeuners complets</li>
+              <li><span class="menu-dot"></span>Œufs, toasts, jus frais</li>
+              <li><span class="menu-dot"></span>Planches charcuterie</li>
+              <li><span class="menu-dot"></span>Formules variées</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="galerie" class="section">
+    <div class="container">
+      <div class="section-head anim">
+        <span class="eyebrow">03 · Galerie</span>
+        <h2 class="h-lg">Ambiance &amp; instants</h2>
+      </div>
+      <div class="masonry">
+        <div class="masonry-item anim"><div class="gal-visual gv-coffee" style="height:280px"><span class="gv-icon">☕</span><span class="gv-label">L'art de l'espresso</span></div></div>
+        <div class="masonry-item anim"><div class="gal-visual gv-floral" style="height:340px"><span class="gv-icon">🌿</span><span class="gv-label">Décor botanique</span></div></div>
+        <div class="masonry-item anim"><div class="gal-visual gv-shake" style="height:260px"><span class="gv-icon">🥤</span><span class="gv-label">Milkshake maison</span></div></div>
+        <div class="masonry-item anim"><div class="gal-visual gv-interieur" style="height:380px"><span class="gv-icon">🏠</span><span class="gv-label">Notre espace</span></div></div>
+        <div class="masonry-item anim"><div class="gal-visual gv-latte" style="height:300px"><span class="gv-icon">🫶</span><span class="gv-label">Latte art</span></div></div>
+        <div class="masonry-item anim"><div class="gal-visual gv-table" style="height:320px"><span class="gv-icon">🍽️</span><span class="gv-label">Table dressée</span></div></div>
+        <div class="masonry-item anim"><div class="gal-visual gv-plantes" style="height:260px"><span class="gv-icon">🌱</span><span class="gv-label">Ambiance verte</span></div></div>
+        <div class="masonry-item anim"><div class="gal-visual gv-cozy" style="height:360px"><span class="gv-icon">🕯️</span><span class="gv-label">Moment cozy</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section">
+    <div class="container">
+      <div class="section-head anim">
+        <span class="eyebrow">04 · Contact</span>
+        <h2 class="h-lg">Venez nous voir</h2>
+        <p class="sub">3 bis rue Napoléon, en plein cœur de Compiègne.</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-card anim">
+          <div class="info-row">
+            <div class="info-ico">📍</div>
+            <div class="info-body"><span class="info-lbl">Adresse</span>3 bis rue Napoléon<br>60200 Compiègne, France</div>
+          </div>
+          <div class="info-row">
+            <div class="info-ico">📞</div>
+            <div class="info-body"><span class="info-lbl">Téléphone</span><a href="tel:+33633832393">06 33 83 23 93</a></div>
+          </div>
+          <div class="info-row">
+            <div class="info-ico">✉️</div>
+            <div class="info-body"><span class="info-lbl">Email</span><a href="mailto:pastelcafe3@outlook.com">pastelcafe3@outlook.com</a></div>
+          </div>
+          <div class="info-row">
+            <div class="info-ico">📘</div>
+            <div class="info-body">
+              <span class="info-lbl">Réseaux sociaux</span>
+              <a href="https://www.facebook.com/people/Pastel-Caf%C3%A9-Compi%C3%A8gne/61557436863468/" target="_blank" rel="noopener">Pastel Café Compiègne</a><br>
+              <span style="font-size:.78rem;color:var(--muted);">Facebook &amp; Messenger</span>
+            </div>
+          </div>
+          <table class="horaires">
+            <tr><td>Lundi</td><td>Fermé</td></tr>
+            <tr><td>Mardi – Vendredi</td><td>09h00 – 19h00</td></tr>
+            <tr><td>Samedi</td><td>09h00 – 20h00</td></tr>
+            <tr><td>Dimanche</td><td>09h00 – 16h00</td></tr>
+          </table>
+          <div class="rating">
+            <span class="stars">★★★★★</span>
+            <p>100 % recommandé · 5 avis Facebook</p>
+          </div>
+          <div style="display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.2rem;">
+            <a href="https://www.facebook.com/people/Pastel-Caf%C3%A9-Compi%C3%A8gne/61557436863468/" target="_blank" rel="noopener" class="btn btn--terra" style="gap:.55rem;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.99 3.66 9.13 8.44 9.88v-6.99H7.9v-2.89h2.54V9.84c0-2.51 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.89h-2.34v6.99C18.34 21.13 22 16.99 22 12z"/></svg>
+              Facebook
+            </a>
+            <a href="https://www.instagram.com/pastelcafecompiegne/" target="_blank" rel="noopener" class="btn btn--terra" style="gap:.55rem;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.326 3.608 1.301.975.975 1.24 2.242 1.301 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.326 2.633-1.301 3.608-.975.975-2.242 1.24-3.608 1.301-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.326-3.608-1.301-.975-.975-1.24-2.242-1.301-3.608C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.062-1.366.326-2.633 1.301-3.608.975-.975 2.242-1.24 3.608-1.301C8.416 2.175 8.796 2.163 12 2.163zm0-2.163c-3.259 0-3.667.014-4.947.072-1.613.074-3.067.372-4.204 1.509C1.712 2.718 1.414 4.172 1.34 5.785.014 8.416 0 8.741 0 12c0 3.259.014 3.667.072 4.947.074 1.613.372 3.067 1.509 4.204 1.137 1.137 2.591 1.435 4.204 1.509C8.333 23.986 8.741 24 12 24c3.259 0 3.667-.014 4.947-.072 1.613-.074 3.067-.372 4.204-1.509 1.137-1.137 1.435-2.591 1.509-4.204C23.986 15.667 24 15.259 24 12c0-3.259-.014-3.667-.072-4.947-.074-1.613-.372-3.067-1.509-4.204-1.137-1.137-2.591-1.435-4.204-1.509C15.667.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+              Instagram
+            </a>
+          </div>
+        </div>
+        <div class="newsletter-card anim">
+          <span class="nl-eyebrow">Newsletter</span>
+          <h3>Restez dans l'ambiance Pastel</h3>
+          <p>Nouveautés, événements, offres exclusives — directement dans votre boîte mail. Un email de confirmation vous sera envoyé à l'inscription.</p>
+          <form class="nl-form" id="nl-form" novalidate>
+            <input type="text" name="b_MAILCHIMP_U_MAILCHIMP_ID" tabindex="-1" style="display:none" autocomplete="off">
+            <input type="text" id="nl-fname" name="FNAME" placeholder="Votre prénom">
+            <input type="email" id="nl-email" name="EMAIL" placeholder="Votre adresse e-mail" required>
+            <button type="submit" class="nl-submit" id="nl-btn">S'abonner →</button>
+          </form>
+          <div class="nl-success" id="nl-success">✓ Merci ! Vérifiez votre boîte mail pour confirmer votre inscription.</div>
+          <div class="nl-error" id="nl-error"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img class="footer-logo-img" src="logo.jpg" alt="Pastel Café">
+          <div>
+            <strong>Pastel Café</strong>
+            <span>Un écrin floral au cœur de Compiègne</span>
+          </div>
+        </div>
+        <div class="footer-hours">
+          <span><strong>Mar–Ven</strong> 9h–19h</span>
+          <span><strong>Samedi</strong> 9h–20h</span>
+          <span><strong>Dimanche</strong> 9h–16h</span>
+          <span><strong>Lundi</strong> Fermé</span>
+        </div>
+        <nav class="footer-links" aria-label="Pied de page">
+          <a href="#histoire">Notre histoire</a>
+          <a href="#carte">La carte</a>
+          <a href="#galerie">Galerie</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Pastel Café · 3 bis rue Napoléon, 60200 Compiègne · 06 33 83 23 93</span>
+        <div class="footer-socials">
+          <a href="https://www.facebook.com/people/Pastel-Caf%C3%A9-Compi%C3%A8gne/61557436863468/" target="_blank" rel="noopener" class="s-btn" aria-label="Facebook">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/pastelcafecompiegne/" target="_blank" rel="noopener" class="s-btn" aria-label="Instagram">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.326 3.608 1.301.975.975 1.24 2.242 1.301 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.326 2.633-1.301 3.608-.975.975-2.242 1.24-3.608 1.301-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.326-3.608-1.301-.975-.975-1.24-2.242-1.301-3.608C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.062-1.366.326-2.633 1.301-3.608.975-.975 2.242-1.24 3.608-1.301C8.416 2.175 8.796 2.163 12 2.163zm0-2.163c-3.259 0-3.667.014-4.947.072-1.613.074-3.067.372-4.204 1.509C1.712 2.718 1.414 4.172 1.34 5.785.014 8.416 0 8.741 0 12c0 3.259.014 3.667.072 4.947.074 1.613.372 3.067 1.509 4.204 1.137 1.137 2.591 1.435 4.204 1.509C8.333 23.986 8.741 24 12 24c3.259 0 3.667-.014 4.947-.072 1.613-.074 3.067-.372 4.204-1.509 1.137-1.137 1.435-2.591 1.509-4.204C23.986 15.667 24 15.259 24 12c0-3.259-.014-3.667-.072-4.947-.074-1.613-.372-3.067-1.509-4.204-1.137-1.137-2.591-1.435-4.204-1.509C15.667.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+          </a>
+          <a href="mailto:pastelcafe3@outlook.com" class="s-btn" aria-label="Email">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          </a>
+          <a href="tel:+33633832393" class="s-btn" aria-label="Téléphone">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      const elems = document.querySelectorAll(".anim");
+      if (!('IntersectionObserver' in window)) return;
+      elems.forEach(el => el.classList.add("hidden"));
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            const siblings = Array.from(e.target.parentElement.querySelectorAll(".anim.hidden"));
+            const idx = siblings.indexOf(e.target);
+            setTimeout(() => { e.target.classList.remove("hidden"); io.unobserve(e.target); }, Math.min(idx * 80, 320));
+          }
+        });
+      }, { threshold: 0.08, rootMargin: "0px 0px -30px 0px" });
+      elems.forEach(el => io.observe(el));
+      setTimeout(() => elems.forEach(el => el.classList.remove("hidden")), 800);
+    })();
+
+    const nav = document.getElementById('nav');
+    addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 30), { passive: true });
+
+    const burger = document.getElementById('burger');
+    const mobileNav = document.getElementById('mobileNav');
+    burger.addEventListener('click', () => {
+      const open = mobileNav.classList.toggle('open');
+      burger.classList.toggle('open', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+    document.querySelectorAll('.mob-link').forEach(l => l.addEventListener('click', () => {
       mobileNav.classList.remove('open');
+      burger.classList.remove('open');
       document.body.style.overflow = '';
-    });
-  });
+    }));
 
-  /* ─────────────────── NAV SCROLL ─────────────────── */
-  const nav = document.getElementById('nav');
-  window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 20);
-  }, { passive: true });
-
-  /* ─────────────────── TABS ─────────────────── */
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
-    });
-  });
-
-  /* ─────────────────── SCROLL REVEAL ─────────────────── */
-  const revealEls = document.querySelectorAll('.reveal');
-  revealEls.forEach(el => el.classList.add('will-animate'));
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-    });
-  }, { threshold: 0.12 });
-  revealEls.forEach(el => io.observe(el));
-
-  /* ─────────────────── NEWSLETTER ─────────────────── */
-  document.getElementById('nlForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const form    = e.target;
-    const errEl   = document.getElementById('nlError');
-    const succEl  = document.getElementById('nlSuccess');
-    const submit  = form.querySelector('.nl-submit');
-    const emailEl = form.querySelector('input[type="email"]');
-    const nameEl  = form.querySelector('input[type="text"]');
-
-    errEl.style.display  = 'none';
-    succEl.style.display = 'none';
-
-    const email = emailEl.value.trim();
-    const name  = nameEl.value.trim();
-    if (!email || !email.includes('@')) {
-      errEl.textContent    = 'Veuillez entrer une adresse e-mail valide.';
-      errEl.style.display  = 'block';
-      return;
+    if ('IntersectionObserver' in window) {
+      document.querySelectorAll('.reveal').forEach(el => el.classList.add('will-animate'));
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { e.target.classList.remove('will-animate'); e.target.classList.add('in'); obs.unobserve(e.target); }
+        });
+      }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
+      document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+      setTimeout(() => {
+        document.querySelectorAll('.reveal.will-animate').forEach(el => { el.classList.remove('will-animate'); el.classList.add('in'); });
+      }, 600);
     }
 
-    submit.disabled    = true;
-    submit.textContent = 'Envoi...';
+    const MC_URL = 'VOTRE_URL_MAILCHIMP';
+    const nlForm = document.getElementById('nl-form');
+    const nlSuccess = document.getElementById('nl-success');
+    const nlError = document.getElementById('nl-error');
+    const nlBtn = document.getElementById('nl-btn');
 
-    try {
-      const res = await fetch('https://formspree.io/f/xpwzznpg', {
-        method : 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body   : JSON.stringify({ email, name, _subject: 'Nouvelle inscription newsletter — Pastel Café' }),
+    if (nlForm) {
+      nlForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (MC_URL === 'VOTRE_URL_MAILCHIMP') {
+          nlError.textContent = '⚠ Veuillez configurer votre URL Mailchimp.';
+          nlError.style.display = 'block';
+          return;
+        }
+        const email = document.getElementById('nl-email').value.trim();
+        const fname = document.getElementById('nl-fname').value.trim();
+        if (!email) return;
+        nlBtn.textContent = 'Envoi…';
+        nlBtn.disabled = true;
+        const callbackName = 'mc_cb_' + Date.now();
+        const url = MC_URL.replace('/post?', '/post-json?') +
+                    '&EMAIL=' + encodeURIComponent(email) +
+                    '&FNAME=' + encodeURIComponent(fname) +
+                    '&c=' + callbackName;
+        window[callbackName] = (data) => {
+          delete window[callbackName];
+          script.remove();
+          nlBtn.textContent = 'S\'abonner →';
+          nlBtn.disabled = false;
+          if (data.result === 'success') {
+            nlForm.style.display = 'none';
+            nlSuccess.style.display = 'block';
+          } else {
+            const msg = data.msg || 'Une erreur est survenue.';
+            nlError.textContent = msg.includes('already subscribed') ? '⚠ Cette adresse est déjà inscrite.' : '⚠ ' + msg.replace(/<[^>]+>/g, '');
+            nlError.style.display = 'block';
+          }
+        };
+        const script = document.createElement('script');
+        script.src = url;
+        script.onerror = () => {
+          delete window[callbackName];
+          script.remove();
+          nlBtn.textContent = 'S\'abonner →';
+          nlBtn.disabled = false;
+          nlError.textContent = '⚠ Erreur réseau. Vérifiez votre connexion.';
+          nlError.style.display = 'block';
+        };
+        document.body.appendChild(script);
       });
-      if (res.ok) {
-        form.style.display   = 'none';
-        succEl.style.display = 'block';
-      } else {
-        throw new Error('server');
-      }
-    } catch {
-      errEl.textContent   = 'Une erreur est survenue. Veuillez réessayer.';
-      errEl.style.display = 'block';
-      submit.disabled     = false;
-      submit.textContent  = 'S’abonner →';
     }
-  });
-</script>
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        const panel = document.getElementById('tp-' + btn.dataset.tab);
+        panel.classList.add('active');
+        if (window.innerWidth < 880) setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+      });
+    });
+  </script>
 </body>
 </html>
